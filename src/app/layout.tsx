@@ -3,12 +3,12 @@ import localFont from "next/font/local";
 import "./globals.css";
 
 const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
+  src: "../fonts/GeistVF.woff",
   variable: "--font-geist-sans",
   weight: "100 900",
 });
 const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
+  src: "../fonts/GeistMonoVF.woff",
   variable: "--font-geist-mono",
   weight: "100 900",
 });
@@ -28,7 +28,12 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+        <div className="relative flex flex-col justify-center overflow-hidden bg-gray-100 h-full">
+          <div className="absolute inset-0"></div>
+          <main className="flex-1 h-full relative shadow-xl sm:mx-auto sm:w-layout bg-white">
+            {children}
+          </main>
+        </div>
       </body>
     </html>
   );

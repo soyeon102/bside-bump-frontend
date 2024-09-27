@@ -5,6 +5,7 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --min-layout-size: 475px;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -15,9 +16,10 @@
 }
 
 body {
-  color: var(--foreground);
+  /* color: var(--foreground);
   background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: Arial, Helvetica, sans-serif; */
+  height: 100dvh;
 }
 
 @layer utilities {

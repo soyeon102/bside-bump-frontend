@@ -12,6 +12,9 @@ const config: Config = {
         background: "var(--background)",
         foreground: "var(--foreground)",
       },
+      width: {
+        layout: "var(--min-layout-size)",
+      },
     },
   },
   plugins: [],
