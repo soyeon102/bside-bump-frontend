@@ -18,10 +18,10 @@ jobs:
         id: push_directory
         uses: cpina/github-action-push-to-another-repository@main
         env:
-          API_TOKEN_GITHUB: ${{ secrets.AUTO_ACTIONS }}
+          API_TOKEN_GITHUB: ${{ secrets.MY_TOKEN }}
         with:
           source-directory: 'output'
-          destination-github-username: 'soeyon102'
+          destination-github-username: 'soyeon102'
           destination-repository-name: 'bside-bump-frontend'
           user-email: ${{ secrets.EMAIL }}
           commit-message: ${{ github.event.commits[0].message }}
