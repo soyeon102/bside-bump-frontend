@@ -6,6 +6,7 @@
   --background: #ffffff;
   --foreground: #171717;
   --min-layout-size: 475px;
+  --border: #009e36;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -19,11 +20,30 @@ body {
   /* color: var(--foreground);
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif; */
-  height: 100dvh;
+  min-height: 100dvh;
 }
 
 @layer utilities {
   .text-balance {
     text-wrap: balance;
   }
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  appearance: textfield;
+  -moz-appearance: textfield;
+}
+
+input {
+  outline: 0;
+  border-bottom: 2px solid #535353;
+}
+input:focus {
+  border-color: var(--border);
 }

@@ -1,15 +1,11 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+import Navbar from "./components/Navbar";
 
-const geistSans = localFont({
-  src: "../fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
-});
-const geistMono = localFont({
-  src: "../fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
+const suitVariable = localFont({
+  src: "../fonts/SUIT-Variable.woff2",
+  variable: "--font-suit",
   weight: "100 900",
 });
 
@@ -25,12 +21,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <div className="relative flex flex-col justify-center overflow-hidden bg-gray-100 h-full">
+      <body className={`${suitVariable.className} antialiased`}>
+        <div className="relative flex flex-col justify-center overflow-hidden bg-gray-100 min-h-inherit">
           <div className="absolute inset-0"></div>
-          <main className="flex-1 h-full relative shadow-xl sm:mx-auto sm:w-layout bg-white">
+          <main className="flex flex-col flex-1 min-h-inherit relative shadow-xl sm:mx-auto sm:w-layout bg-white">
+            <Navbar />
             {children}
           </main>
         </div>
