@@ -7,7 +7,7 @@ const HomePage = () => {
     <div className="bg-home flex-1 px-6 flex flex-col justify-between">
       <div className="flex flex-col flex-1 items-center mt-14 gap-8">
         <Image src="/imgs/logo.png" alt="로고" width={220} height={66} />
-        <p className="text-center text-lg font-bold text-gray02 leading-tight">
+        <p className="text-center text-title-sm text-gray02 leading-tight">
           당장의 과소비를 막고 싶은 당신에게 <br />
           추천하는 과소비 방지 서비스
         </p>
@@ -18,7 +18,7 @@ const HomePage = () => {
           height={316}
         />
       </div>
-      <Link href="/ask-item">
+      <Link href="/ask-item" className="mb-7">
         <Button color="home">시작할게요</Button>
       </Link>
     </div>

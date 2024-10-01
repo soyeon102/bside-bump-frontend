@@ -18,7 +18,7 @@ const Button = ({
   return (
     <button
       type="button"
-      className={`h-14 w-full py-2.5 px-5 mb-7 text-lg font-bold focus:outline-none rounded-lg ${
+      className={`h-14 w-full py-2.5 px-5 text-lg font-bold focus:outline-none rounded-xl ${
         disable && "bg-gray03 text-white"
       } ${color ? colorVariants[color] : ""}`}
       onClick={onClick}

@@ -24,6 +24,10 @@ const config: Config = {
       width: {
         layout: "var(--min-layout-size)",
       },
+      maxWidth: {
+        layout: "var(--min-layout-size)",
+        "layout-calc": "calc(var(--min-layout-size) - 2rem)",
+      },
       minHeight: {
         inherit: "inherit",
       },
@@ -35,6 +39,21 @@ const config: Config = {
             fontWeight: "bold",
           },
         ],
+        "title-sm": [
+          "1.125rem",
+          {
+            fontWeight: "bold",
+          },
+        ],
+      },
+      boxShadow: {
+        innerBorder: "inset 0 0 0 1.5px #000000",
+      },
+      borderRadius: {
+        half: "6.25rem",
+      },
+      gridTemplateColumns: {
+        list: "repeat(auto-fill, minmax(5rem, 1fr))",
       },
     },
   },

@@ -1,10 +1,9 @@
 import { StateCreator } from "zustand";
 
-type ComparisonItem = {
+type SelectedItem = {
   id: string;
   name: string;
   price: number;
-  isEditable: boolean;
 };
 
 type Condition = "more" | "save";
@@ -13,26 +12,31 @@ export interface UserItemSlice {
   thatItemName: string;
   thatItemPrice: string;
   selectCondition: Condition | null;
-  comparisonItemList: ComparisonItem[];
+  selectItemList: SelectedItem[];
   setThatItemName: (itemName: string) => void;
   setThatItemPrice: (itemPrice: string) => void;
   setSelectCondition: (condition: Condition) => void;
-  setComparisonItemList: (item: ComparisonItem) => void;
+  addSelectItem: (item: SelectedItem) => void;
+  deleteItem: (id: string) => void;
 }
 
 export const createUserItemSlice: StateCreator<UserItemSlice> = (set) => ({
   thatItemName: "",
   thatItemPrice: "",
   selectCondition: null,
-  comparisonItemList: [],
+  selectItemList: [],
   setThatItemName: (itemName) => set(() => ({ thatItemName: itemName })),
   setThatItemPrice: (itemPrice) => set(() => ({ thatItemPrice: itemPrice })),
   setSelectCondition: (condition) =>
     set(() => ({ selectCondition: condition })),
-  setComparisonItemList: (item) =>
+  addSelectItem: (item) =>
     set((state) => ({
-      comparisonItemList: Array.isArray(item)
+      selectItemList: Array.isArray(item)
         ? item
-        : [...state.comparisonItemList, item],
+        : [...state.selectItemList, item],
+    })),
+  deleteItem: (id) =>
+    set((state) => ({
+      selectItemList: state.selectItemList.filter((item) => item.id !== id),
     })),
 });

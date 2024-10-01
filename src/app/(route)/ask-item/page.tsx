@@ -5,22 +5,14 @@ import { useStore } from "@/app/store/useStore";
 import Image from "next/image";
 import Link from "next/link";
 import { ChangeEvent } from "react";
+import { formatWithCommas } from "@/app/utils/formatWithCommas";
+import usePriceChange from "@/app/hooks/usePriceChange";
 
 const AskItemPage = () => {
   const { thatItemName, thatItemPrice, setThatItemName, setThatItemPrice } =
     useStore();
 
-  const handlePriceChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const rawValue = e.currentTarget.value.replace(/[, ]/g, "");
-
-    if (!isNaN(Number(rawValue))) {
-      setThatItemPrice(rawValue);
-    }
-  };
-
-  const formatWithCommas = (value: string) => {
-    return value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  };
+  const { handlePriceChange } = usePriceChange(thatItemPrice, setThatItemPrice);
 
   return (
     <>
@@ -59,6 +51,7 @@ const AskItemPage = () => {
               type="text"
               value={thatItemPrice ? formatWithCommas(thatItemPrice) : ""}
               onChange={handlePriceChange}
+              pattern="\d*"
             />
             <span className="font-bold text-lg">원</span>
           </div>
@@ -67,7 +60,7 @@ const AskItemPage = () => {
           </span>
         </div>
       </div>
-      <Link href="/ask-condition" className="px-6">
+      <Link href="/ask-condition" className="px-6 mb-7">
         <Button
           color="plain"
           disable={
