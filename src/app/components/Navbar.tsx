@@ -20,10 +20,6 @@ const Navbar = () => {
       navigation: "/select",
       hasBack: true,
     },
-    {
-      navigation: "/result",
-      hasBack: true,
-    },
   ];
 
   const findRoute = showHeaderRoutes.find(

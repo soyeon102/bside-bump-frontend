@@ -4,7 +4,7 @@ import Image from "next/image";
 
 const HomePage = () => {
   return (
-    <div className="bg-home flex-1 px-6 flex flex-col justify-between">
+    <div className="bg-home bg-contain flex-1 px-6 flex flex-col justify-between">
       <div className="flex flex-col flex-1 items-center mt-14 gap-8">
         <Image src="/imgs/logo.png" alt="로고" width={220} height={66} />
         <p className="text-center text-title-sm text-gray02 leading-tight">

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import Navbar from "./components/Navbar";
+import Providers from "./utils/provider";
 
 const suitVariable = localFont({
   src: "../fonts/SUIT-Variable.woff2",
@@ -22,13 +23,15 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${suitVariable.className} antialiased`}>
-        <div className="relative flex flex-col justify-center overflow-hidden bg-gray-100 min-h-inherit">
-          <div className="absolute inset-0"></div>
-          <main className="flex flex-col flex-1 min-h-inherit relative shadow-xl sm:mx-auto sm:w-layout bg-white">
-            <Navbar />
-            {children}
-          </main>
-        </div>
+        <Providers>
+          <div className="relative flex flex-col justify-center overflow-hidden bg-gray-100 min-h-inherit">
+            <div className="absolute inset-0"></div>
+            <main className="flex flex-col flex-1 min-h-inherit relative shadow-xl sm:mx-auto sm:w-layout bg-white">
+              <Navbar />
+              {children}
+            </main>
+          </div>
+        </Providers>
       </body>
     </html>
   );

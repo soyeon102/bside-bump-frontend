@@ -1,5 +1,6 @@
 import { formatWithCommas } from "@/app/utils/formatWithCommas";
 import Image from "next/image";
+import CheckedIcon from "@public/icons/checked.svg";
 
 const Item = ({
   id,
@@ -18,17 +19,26 @@ const Item = ({
 }) => {
   return (
     <li
-      className={`flex flex-col items-center cursor-pointer`}
+      className={`flex flex-col items-center ${!selected && "cursor-pointer"}`}
       value={id}
       onClick={onClickItem}
     >
-      <div className="w-full border rounded-lg overflow-hidden min-w-20 min-h-20 mb-2 relative">
+      <div
+        className={`w-full border rounded-lg overflow-hidden min-w-20 min-h-20 mb-2 relative `}
+      >
         <Image
           src={imgSrc}
           alt={name}
           fill
-          className="object-cover w-full h-auto"
+          className={`object-cover w-full h-auto ${
+            selected && "brightness-50"
+          }`}
         />
+        {selected && (
+          <div className="absolute top-1 right-1">
+            <CheckedIcon />
+          </div>
+        )}
       </div>
       <p className="font-bold">{name}</p>
       <p className="font-semibold text-sm">{formatWithCommas(price)}</p>

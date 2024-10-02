@@ -6,7 +6,7 @@ type SelectedItem = {
   price: number;
 };
 
-type Condition = "more" | "save";
+type Condition = "MORE" | "EXPENSIVE";
 
 export interface UserItemSlice {
   thatItemName: string;
@@ -18,6 +18,7 @@ export interface UserItemSlice {
   setSelectCondition: (condition: Condition) => void;
   addSelectItem: (item: SelectedItem) => void;
   deleteItem: (id: string) => void;
+  resetItem: () => void;
 }
 
 export const createUserItemSlice: StateCreator<UserItemSlice> = (set) => ({
@@ -39,4 +40,5 @@ export const createUserItemSlice: StateCreator<UserItemSlice> = (set) => ({
     set((state) => ({
       selectItemList: state.selectItemList.filter((item) => item.id !== id),
     })),
+  resetItem: () => set({ selectItemList: [] }),
 });

@@ -22,7 +22,7 @@ const AskConditionPage = () => {
       </p>
       <p className="text-title-lg">제 생각에는...</p>
       <div className="flex flex-col gap-3 mt-16">
-        <Link href="/select" onClick={() => setSelectCondition("more")}>
+        <Link href="/select" onClick={() => setSelectCondition("MORE")}>
           <ConditionBox
             topic="그 돈이면 차라리"
             text="같은 돈으로 할 수 있는
@@ -30,11 +30,11 @@ const AskConditionPage = () => {
             imgSrc="/imgs/coin.png"
           />
         </Link>
-        <Link href="/select" onClick={() => setSelectCondition("save")}>
+        <Link href="/select" onClick={() => setSelectCondition("EXPENSIVE")}>
           <ConditionBox
             topic="그 돈이면 아껴서"
-            text="같은 돈으로 할 수 있는
-더 많은 것들을 골라봐요"
+            text="이걸로 할 수 있는 금액의
+N%를 벌써 모은 거예요"
             imgSrc="/imgs/percentage.png"
           />
         </Link>

@@ -37,7 +37,7 @@ const Alert = ({
       >
         <div className="mb-3">
           <Image
-            src="/imgs/emoji-alert.png"
+            src="/imgs/emoji-alert.gif"
             alt="emoji"
             width={66}
             height={66}

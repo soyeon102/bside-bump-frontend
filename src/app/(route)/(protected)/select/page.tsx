@@ -6,12 +6,15 @@ import { nanoid } from "nanoid";
 import Link from "next/link";
 import AddCircle from "@public/icons/circle-add.svg";
 import Chip from "@/app/components/select/Chip";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import BottomSheet from "@/app/components/BottomSheet";
 import { formatWithCommas } from "@/app/utils/formatWithCommas";
 import usePriceChange from "@/app/hooks/usePriceChange";
 import Item from "@/app/components/select/Item";
 import Alert from "@/app/components/Alert";
+import { useQuery } from "@tanstack/react-query";
+
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 type SelectedItem = {
   id: string;
@@ -158,11 +161,26 @@ const SelectPage = () => {
     thatItemPrice,
     selectCondition,
     selectItemList,
-    setThatItemName,
-    setThatItemPrice,
     addSelectItem,
     deleteItem,
+    resetItem,
   } = useStore();
+
+  // const { data } = useQuery({
+  //   queryKey: ["category"],
+  //   queryFn: () =>
+  //     fetch(
+  //       `${API_URL}/category?type=${selectCondition}&price=${Number(
+  //         thatItemPrice
+  //       )}`
+  //     ),
+  // });
+
+  // console.log("data", data);
+
+  useEffect(() => {
+    resetItem();
+  }, []);
 
   const [selectedCategory, setSelectedCategory] = useState<string>(
     categories[0].value
@@ -176,11 +194,17 @@ const SelectPage = () => {
   const { handlePriceChange } = usePriceChange(addItemPrice, setAddItemPrice);
 
   const openBottomSheet = () => {
-    if (selectItemList.length >= 3) {
+    if (selectCondition === "MORE" && selectItemList.length >= 3) {
       setIsAlertOpen(true);
       showAlert("품목은 최대 3개까지만 입력할 수 있어요");
       return;
     }
+    if (selectCondition === "EXPENSIVE" && selectItemList.length >= 1) {
+      setIsAlertOpen(true);
+      showAlert("품목은 최대 1개까지만 입력할 수 있어요");
+      return;
+    }
+
     setIsBottomSheetOpen(true);
   };
 
@@ -195,13 +219,28 @@ const SelectPage = () => {
   };
 
   const handleClickAddItem = () => {
-    if (Number(thatItemPrice) <= Number(addItemPrice)) {
+    if (
+      selectCondition === "MORE" &&
+      Number(thatItemPrice) <= Number(addItemPrice)
+    ) {
       setIsAlertOpen(true);
       showAlert(
         `가격이 너무 높아요 구매를 망설이는 품목의 가격보다 낮은 가격을 입력해 보세요`
       );
       return;
     }
+
+    if (
+      selectCondition === "EXPENSIVE" &&
+      Number(thatItemPrice) >= Number(addItemPrice)
+    ) {
+      setIsAlertOpen(true);
+      showAlert(
+        `가격이 너무 낮아요 구매를 망설이는 품목의 가격보다 높은 가격을 입력해 보세요`
+      );
+      return;
+    }
+
     addSelectItem({
       id: nanoid(),
       name: addItemName,
@@ -209,14 +248,24 @@ const SelectPage = () => {
     });
     closeBottomSheet();
   };
+
   const showAlert = (message: string) => {
     setAlertMessage(message);
   };
 
   const handleClickItem = (item: SelectedItem) => {
-    if (selectItemList.length >= 3) {
+    if (selectItemList.some((el) => el.id === item.id)) {
+      return;
+    }
+    if (selectCondition === "MORE" && selectItemList.length >= 3) {
       setIsAlertOpen(true);
       showAlert("품목은 최대 3개까지만 입력할 수 있어요");
+      return;
+    }
+
+    if (selectCondition === "EXPENSIVE" && selectItemList.length >= 1) {
+      setIsAlertOpen(true);
+      showAlert("품목은 최대 1개까지만 입력할 수 있어요");
       return;
     }
 
@@ -231,7 +280,7 @@ const SelectPage = () => {
     deleteItem(id);
   };
 
-  // console.log("selectedItem", selectItemList);
+  console.log(selectItemList);
 
   return (
     <>
@@ -240,7 +289,7 @@ const SelectPage = () => {
           {thatItemName} {Number(thatItemPrice).toLocaleString()}원
         </p>
         <p className="text-title-lg">
-          {selectCondition === "more"
+          {selectCondition === "MORE"
             ? "그 돈이면 차라리 이런걸 사겠어요"
             : "그 돈이면 아껴서 이런걸 사겠어요"}
         </p>
@@ -278,8 +327,8 @@ const SelectPage = () => {
                 price={item.price}
                 imgSrc={item.imgSrc}
                 onClickItem={() => handleClickItem(item)}
-                selected={selectItemList.some((item) =>
-                  mockItems.some((el) => el.id === item.id)
+                selected={selectItemList.some(
+                  (selectItem) => selectItem.id === item.id
                 )}
               />
             ))}
