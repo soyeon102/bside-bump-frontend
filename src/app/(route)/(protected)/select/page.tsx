@@ -2,158 +2,52 @@
 
 import Button from "@/app/components/Button";
 import { useStore } from "@/app/store/useStore";
-import { nanoid } from "nanoid";
+import { customAlphabet } from "nanoid";
 import Link from "next/link";
 import AddCircle from "@public/icons/circle-add.svg";
 import Chip from "@/app/components/select/Chip";
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, Key, useEffect, useState } from "react";
 import BottomSheet from "@/app/components/BottomSheet";
 import { formatWithCommas } from "@/app/utils/formatWithCommas";
 import usePriceChange from "@/app/hooks/usePriceChange";
 import Item from "@/app/components/select/Item";
 import Alert from "@/app/components/Alert";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import Loading from "@/app/loading";
+import { useRouter } from "next/navigation";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-type SelectedItem = {
-  id: string;
+type Condition = "MORE" | "EXPENSIVE";
+
+interface ItemType {
   name: string;
   price: string;
-  imgSrc?: string;
+  iconUrl?: string;
+}
+
+interface SelectedItem extends ItemType {
+  id: number;
+}
+
+interface DataType {
+  id: number;
+  name: string;
+  products: SelectedItem[];
+}
+
+interface RecommendedItemType {
+  name: string;
+  price: number;
+  iconUrl?: string | undefined;
+}
+
+type PostItemType = {
+  name: string;
+  price: number;
+  type: Condition;
+  recommendedItems?: RecommendedItemType[];
 };
-
-const categories = [
-  {
-    value: "food",
-    label: "음식",
-  },
-  {
-    value: "goods",
-    label: "잡화",
-  },
-  {
-    value: "culture",
-    label: "문화생활",
-  },
-  {
-    value: "beauty",
-    label: "뷰티",
-  },
-  {
-    value: "trip",
-    label: "여행",
-  },
-  {
-    value: "furniture",
-    label: "가구",
-  },
-  {
-    value: "ott",
-    label: "OTT서비스",
-  },
-  {
-    value: "pet",
-    label: "반려동물용품",
-  },
-  {
-    value: "electronics",
-    label: "가전",
-  },
-];
-
-const mockItems = [
-  {
-    id: "0",
-    name: "떡볶이",
-    price: "9900",
-    imgSrc: "/imgs/mock-image.png",
-  },
-  {
-    id: "1",
-    name: "떡볶이",
-    price: "9900",
-    imgSrc: "/imgs/mock-image.png",
-  },
-  {
-    id: "2",
-    name: "떡볶이",
-    price: "9900",
-    imgSrc: "/imgs/mock-image.png",
-  },
-  {
-    id: "3",
-    name: "떡볶이",
-    price: "9900",
-    imgSrc: "/imgs/mock-image.png",
-  },
-  {
-    id: "4",
-    name: "떡볶이",
-    price: "9900",
-    imgSrc: "/imgs/mock-image.png",
-  },
-  {
-    id: "5",
-    name: "떡볶이",
-    price: "9900",
-    imgSrc: "/imgs/mock-image.png",
-  },
-  {
-    id: "6",
-    name: "떡볶이",
-    price: "9900",
-    imgSrc: "/imgs/mock-image.png",
-  },
-  {
-    id: "7",
-    name: "떡볶이",
-    price: "9900",
-    imgSrc: "/imgs/mock-image.png",
-  },
-  {
-    id: "8",
-    name: "떡볶이",
-    price: "9900",
-    imgSrc: "/imgs/mock-image.png",
-  },
-  {
-    id: "9",
-    name: "떡볶이",
-    price: "9900",
-    imgSrc: "/imgs/mock-image.png",
-  },
-  {
-    id: "10",
-    name: "떡볶이",
-    price: "9900",
-    imgSrc: "/imgs/mock-image.png",
-  },
-  {
-    id: "11",
-    name: "떡볶이",
-    price: "9900",
-    imgSrc: "/imgs/mock-image.png",
-  },
-  {
-    id: "12",
-    name: "떡볶이",
-    price: "9900",
-    imgSrc: "/imgs/mock-image.png",
-  },
-  {
-    id: "13",
-    name: "떡볶이",
-    price: "9900",
-    imgSrc: "/imgs/mock-image.png",
-  },
-  {
-    id: "14",
-    name: "떡볶이",
-    price: "9900",
-    imgSrc: "/imgs/mock-image.png",
-  },
-];
 
 const SelectPage = () => {
   const {
@@ -166,24 +60,27 @@ const SelectPage = () => {
     resetItem,
   } = useStore();
 
-  // const { data } = useQuery({
-  //   queryKey: ["category"],
-  //   queryFn: () =>
-  //     fetch(
-  //       `${API_URL}/category?type=${selectCondition}&price=${Number(
-  //         thatItemPrice
-  //       )}`
-  //     ),
-  // });
+  const { data, isLoading, isSuccess } = useQuery<DataType[]>({
+    queryKey: ["category"],
+    queryFn: async () => {
+      const res = await fetch(
+        `${API_URL}/category?type=${selectCondition}&price=${Number(
+          thatItemPrice
+        )}`
+      );
+      const data = res.json();
+      return data;
+    },
+  });
 
-  // console.log("data", data);
+  const router = useRouter();
 
   useEffect(() => {
     resetItem();
   }, []);
 
-  const [selectedCategory, setSelectedCategory] = useState<string>(
-    categories[0].value
+  const [selectedCategory, setSelectedCategory] = useState<number>(
+    isSuccess ? data[0].id : 1
   );
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState<boolean>(false);
   const [isAlertOpen, setIsAlertOpen] = useState<boolean>(false);
@@ -192,6 +89,8 @@ const SelectPage = () => {
   const [addItemPrice, setAddItemPrice] = useState<string>("");
 
   const { handlePriceChange } = usePriceChange(addItemPrice, setAddItemPrice);
+
+  const nanoid = customAlphabet("0123456789", 10);
 
   const openBottomSheet = () => {
     if (selectCondition === "MORE" && selectItemList.length >= 3) {
@@ -214,7 +113,7 @@ const SelectPage = () => {
     setIsBottomSheetOpen(false);
   };
 
-  const handleClickChip = (value: string) => {
+  const handleClickChip = (value: number) => {
     setSelectedCategory(value);
   };
 
@@ -242,7 +141,7 @@ const SelectPage = () => {
     }
 
     addSelectItem({
-      id: nanoid(),
+      id: Number(nanoid()),
       name: addItemName,
       price: Number(addItemPrice),
     });
@@ -276,11 +175,40 @@ const SelectPage = () => {
     });
   };
 
-  const handleDeleteItem = (id: string) => {
+  const handleDeleteItem = (id: number) => {
     deleteItem(id);
   };
 
-  console.log(selectItemList);
+  const postResult = useMutation({
+    mutationKey: ["postResult"],
+    mutationFn: async (body: PostItemType) =>
+      await fetch(`${API_URL}/result`, {
+        method: "POST",
+        body: JSON.stringify(body),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }),
+    onSuccess: async (res: Response) => {
+      const data = await res.json();
+      router.push(`/result?id=${data.id}`);
+    },
+  });
+
+  const handleClickToResult = async () => {
+    if (selectCondition === null) return;
+
+    postResult.mutate({
+      name: thatItemName,
+      price: Number(thatItemPrice),
+      type: selectCondition,
+      recommendedItems: selectItemList,
+    });
+  };
+
+  if (isLoading) {
+    return <Loading />;
+  }
 
   return (
     <>
@@ -307,31 +235,35 @@ const SelectPage = () => {
             </div>
           </div>
           <div className="flex flex-wrap gap-1">
-            {categories.map((category, index) => (
-              <Chip
-                key={index}
-                selectedCategory={selectedCategory}
-                value={category.value}
-                label={category.label}
-                onClickChip={() => handleClickChip(category.value)}
-              />
-            ))}
+            {isSuccess &&
+              data.map((category, index) => (
+                <Chip
+                  key={category.id}
+                  selectedCategory={selectedCategory}
+                  value={category.id}
+                  label={category.name}
+                  onClickChip={() => handleClickChip(category.id)}
+                />
+              ))}
           </div>
 
           <ul className="grid grid-cols-list gap-x-2 gap-y-5  overflow-y-auto">
-            {mockItems.map((item) => (
-              <Item
-                id={item.id}
-                key={item.id}
-                name={item.name}
-                price={item.price}
-                imgSrc={item.imgSrc}
-                onClickItem={() => handleClickItem(item)}
-                selected={selectItemList.some(
-                  (selectItem) => selectItem.id === item.id
-                )}
-              />
-            ))}
+            {isSuccess &&
+              data
+                .find((category) => category.id === selectedCategory)
+                ?.products.map((item, idx) => (
+                  <Item
+                    id={item.id}
+                    key={idx}
+                    name={item.name}
+                    price={item.price}
+                    iconUrl={item.iconUrl}
+                    onClickItem={() => handleClickItem(item)}
+                    selected={selectItemList.some(
+                      (selectItem) => selectItem.id === item.id
+                    )}
+                  />
+                ))}
           </ul>
         </div>
       </div>
@@ -349,11 +281,15 @@ const SelectPage = () => {
         ))}
       </div>
 
-      <Link href="/result" className="px-6 mb-7">
-        <Button color="plain" disable={selectItemList.length === 0}>
+      <div className="px-6 mb-7">
+        <Button
+          color="plain"
+          disable={selectItemList.length === 0}
+          onClick={handleClickToResult}
+        >
           결과를 볼래요
         </Button>
-      </Link>
+      </div>
 
       {/* 모달 */}
       <BottomSheet isOpen={isBottomSheetOpen} onClose={closeBottomSheet}>

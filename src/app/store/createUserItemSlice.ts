@@ -1,7 +1,7 @@
 import { StateCreator } from "zustand";
 
 type SelectedItem = {
-  id: string;
+  id: number;
   name: string;
   price: number;
 };
@@ -17,7 +17,7 @@ export interface UserItemSlice {
   setThatItemPrice: (itemPrice: string) => void;
   setSelectCondition: (condition: Condition) => void;
   addSelectItem: (item: SelectedItem) => void;
-  deleteItem: (id: string) => void;
+  deleteItem: (id: number) => void;
   resetItem: () => void;
 }
 

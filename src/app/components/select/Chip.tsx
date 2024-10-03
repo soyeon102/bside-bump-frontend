@@ -1,4 +1,4 @@
-import CloseIcon from "@public/icons/close.svg";
+import CloseIcon from "@public/icons/circle-close.svg";
 
 const Chip = ({
   selectedCategory,
@@ -8,8 +8,8 @@ const Chip = ({
   hasDelete,
   onClickDelete,
 }: {
-  selectedCategory?: string;
-  value: string;
+  selectedCategory?: number;
+  value: number;
   label: string;
   onClickChip?: () => void;
   hasDelete?: boolean;
@@ -21,7 +21,7 @@ const Chip = ({
         onClick={onClickChip}
         className={`min-h-9 font-semibold text-sm text-center rounded-half inline-block px-4 py-2 relative max-h-9 ${
           selectedCategory === value
-            ? "bg-black text-primary01"
+            ? "bg-black text-primary02"
             : "bg-gray04 text-gray01"
         } ${!hasDelete && "cursor-pointer"}`}
         defaultValue={value}

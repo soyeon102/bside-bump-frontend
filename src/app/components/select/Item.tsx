@@ -6,14 +6,14 @@ const Item = ({
   id,
   name,
   price,
-  imgSrc,
+  iconUrl,
   selected,
   onClickItem,
 }: {
-  id: string;
+  id: number;
   name: string;
   price: string;
-  imgSrc: string;
+  iconUrl: string | undefined;
   selected: boolean;
   onClickItem: () => void;
 }) => {
@@ -27,7 +27,8 @@ const Item = ({
         className={`w-full border rounded-lg overflow-hidden min-w-20 min-h-20 mb-2 relative `}
       >
         <Image
-          src={imgSrc}
+          // src={iconUrl}
+          src="/imgs/mock-image.avif"
           alt={name}
           fill
           className={`object-cover w-full h-auto ${
@@ -40,7 +41,7 @@ const Item = ({
           </div>
         )}
       </div>
-      <p className="font-bold">{name}</p>
+      <p className="font-bold text-center break-keep">{name}</p>
       <p className="font-semibold text-sm">{formatWithCommas(price)}</p>
     </li>
   );

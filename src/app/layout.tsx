@@ -3,6 +3,14 @@ import localFont from "next/font/local";
 import "./globals.css";
 import Navbar from "./components/Navbar";
 import Providers from "./utils/provider";
+import Script from "next/script";
+import KakaoScript from "./utils/KakaoScript";
+
+declare global {
+  interface Window {
+    Kakao: any;
+  }
+}
 
 const suitVariable = localFont({
   src: "../fonts/SUIT-Variable.woff2",
@@ -33,6 +41,7 @@ export default function RootLayout({
           </div>
         </Providers>
       </body>
+      <KakaoScript />
     </html>
   );
 }

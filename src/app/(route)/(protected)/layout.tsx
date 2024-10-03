@@ -1,6 +1,7 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+
 import { useStore } from "@/app/store/useStore";
 import { useEffect, useState } from "react";
 import Alert from "@/app/components/Alert";
@@ -11,12 +12,19 @@ const ProtectedLayout = ({
   children: React.ReactNode;
 }>) => {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const id = searchParams.get("id");
 
   const { thatItemName, thatItemPrice } = useStore();
   const [isAlertOpen, setIsAlertOpen] = useState<boolean>(false);
-  const [isLoading, setIsLoading] = useState<boolean>(true); // 로딩 상태 추가
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
+    if (id) {
+      setIsLoading(false);
+      return;
+    }
+
     if (thatItemName === "" || thatItemPrice === "") {
       setIsAlertOpen(true);
     }

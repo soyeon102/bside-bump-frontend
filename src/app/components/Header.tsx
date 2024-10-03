@@ -8,7 +8,7 @@ const Header = ({
   onClickBack: () => void;
 }) => {
   return (
-    <nav className="flex justify-between items-center h-11 mb-7 px-6">
+    <nav className="flex justify-between items-center h-11 mb-7 px-6 relative z-0">
       <div className="flex justify-start flex-1">
         {hasBack && (
           <LeftArrow className="cursor-pointer" onClick={onClickBack} />

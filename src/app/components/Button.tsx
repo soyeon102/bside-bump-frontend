@@ -12,8 +12,8 @@ const Button = ({
   color?: keyof typeof colorVariants;
 }) => {
   const colorVariants = {
-    plain: "bg-black text-primary01",
-    home: "bg-[#35E15B] text-black",
+    plain: "bg-black text-primary02",
+    home: "bg-primary03 text-black",
   };
   return (
     <button
