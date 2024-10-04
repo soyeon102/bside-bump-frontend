@@ -40,8 +40,6 @@ interface DataType {
 
 const ResultPage = () => {
   const pageRef = useRef<HTMLDivElement>(null);
-  const bottomRef = useRef<HTMLDivElement>(null);
-
   const searchParams = useSearchParams();
   const id = searchParams.get("id");
 
@@ -99,22 +97,38 @@ const ResultPage = () => {
       file: dataTransfer.files,
     })
       .then((res: any) => {
-        Kakao.Share.sendCustom({
-          templateId: 112825,
-          templateArgs: {
-            TITLE: `${thatItemName} ${thatItemPrice}, 그돈이면 ${
+        Kakao.Share.sendDefault({
+          objectType: "feed",
+          content: {
+            title: `${thatItemName} ${formatWithCommas(
+              thatItemPrice
+            )}원, 그돈이면 ${
               data?.recommendationType === "MORE" ? "차라리" : "아껴서"
             }`,
-            DESC: `${
+            description: `${
               data?.recommendationType === "MORE"
                 ? data?.suggestedItems
                     .map((item) => `${item.name} x ${item.quantity}`)
                     .join(" 또는 ")
                 : `${data?.suggestedItems[0].name} ${data?.suggestedItems[0].percentage}%`
             } 사겠어요`,
-            THU: res.infos.original.url,
-            RESULT_ID: data?.id,
+            imageUrl: res.infos.original.url,
+            imageWidth: 400,
+            imageHeight: 800,
+            link: {
+              mobileWebUrl: "https://with-that-money.vercel.app",
+              webUrl: "https://with-that-money.vercel.app",
+            },
           },
+          buttons: [
+            {
+              title: "자세히 보기",
+              link: {
+                mobileWebUrl: `https://with-that-money.vercel.app/result?id=${data?.id}`,
+                webUrl: `https://with-that-money.vercel.app/result?id=${data?.id}`,
+              },
+            },
+          ],
         });
       })
       .catch((err: any) => {
@@ -133,7 +147,7 @@ const ResultPage = () => {
   return (
     isSuccess && (
       <div
-        className="px-6 bg-result bg-cover min-h-inherit flex flex-col"
+        className="px-6 pb-6 bg-result bg-cover min-h-inherit flex flex-col"
         ref={pageRef}
       >
         <div className="w-full h-3 mt-2 mb-[2px]">
@@ -145,7 +159,7 @@ const ResultPage = () => {
             className="bg-repeat w-full"
           />
         </div>
-        <div className="bg-white flex-1 rounded-b-lg border-b-2 border-dashed p-6 flex">
+        <div className="bg-white flex-1 rounded-b-lg p-6 flex">
           <div className="flex-1 flex flex-col">
             <div className="flex-1">
               <div className="flex flex-col items-center mb-10">
@@ -223,8 +237,8 @@ const ResultPage = () => {
           </div>
         </div>
         <div
-          className="rounded-t-lg p-4 bg-white mb-6 mt-[-1px]"
-          ref={bottomRef}
+          className="rounded-t-lg p-4 bg-white border-t border-dashed"
+          data-html2canvas-ignore={true}
         >
           <div className="text-center rounded-lg bg-[#ECF7F9] py-3 mb-5 font-semibold leading-snug text-gray01">
             과소비 방지 리포트가 만들어졌습니다. <br />
