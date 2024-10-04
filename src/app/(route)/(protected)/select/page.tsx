@@ -75,13 +75,7 @@ const SelectPage = () => {
 
   const router = useRouter();
 
-  useEffect(() => {
-    resetItem();
-  }, []);
-
-  const [selectedCategory, setSelectedCategory] = useState<number>(
-    isSuccess ? data[0].id : 1
-  );
+  const [selectedCategory, setSelectedCategory] = useState<number>(1);
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState<boolean>(false);
   const [isAlertOpen, setIsAlertOpen] = useState<boolean>(false);
   const [alertMessage, setAlertMessage] = useState<string>("");
@@ -91,6 +85,18 @@ const SelectPage = () => {
   const { handlePriceChange } = usePriceChange(addItemPrice, setAddItemPrice);
 
   const nanoid = customAlphabet("0123456789", 10);
+
+  useEffect(() => {
+    if (isSuccess) {
+      setSelectedCategory(
+        data.find((item) => item.products.length !== 0)?.id ?? 1
+      );
+    }
+  }, [isSuccess, data]);
+
+  useEffect(() => {
+    resetItem();
+  }, []);
 
   const openBottomSheet = () => {
     if (selectCondition === "MORE" && selectItemList.length >= 3) {
@@ -210,8 +216,6 @@ const SelectPage = () => {
     return <Loading />;
   }
 
-  console.log("data", data);
-
   return (
     <>
       <div className="px-6 flex-1 flex flex-col">
@@ -238,20 +242,21 @@ const SelectPage = () => {
           </div>
           <div className="flex flex-wrap gap-1">
             {isSuccess &&
-              data.map((category) => (
-                <Chip
-                  key={category.id}
-                  selectedCategory={selectedCategory}
-                  value={category.id}
-                  label={category.name}
-                  onClickChip={() => handleClickChip(category.id)}
-                />
-              ))}
+              data
+                .filter((item) => item.products.length !== 0)
+                .map((category) => (
+                  <Chip
+                    key={category.id}
+                    selectedCategory={selectedCategory}
+                    value={category.id}
+                    label={category.name}
+                    onClickChip={() => handleClickChip(category.id)}
+                  />
+                ))}
           </div>
 
           {isSuccess &&
-            (data.find((category) => category.id === selectedCategory)?.products
-              .length === 0 ? (
+            (data.every((category) => category.products.length === 0) ? (
               <div className="w-full h-full flex-1 flex flex-col justify-center items-center text-center gap-y-5">
                 <EmptyIcon />
                 <p className="break-keep text-gray02 font-semibold">
@@ -329,6 +334,7 @@ const SelectPage = () => {
                 value={addItemPrice ? formatWithCommas(addItemPrice) : ""}
                 onChange={handlePriceChange}
                 pattern="\d*"
+                maxLength={15}
               />
               <span className="font-bold text-lg">원</span>
             </div>

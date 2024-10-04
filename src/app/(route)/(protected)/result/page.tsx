@@ -105,18 +105,18 @@ const ResultPage = () => {
         Kakao.Share.sendDefault({
           objectType: "feed",
           content: {
-            title: `${thatItemName} ${formatWithCommas(
-              thatItemPrice
-            )}원, 그돈이면 ${
+            title:
+              "지금, 구매를 망설이고 있나요?\n과소비 방지 서비스 <그돈이면>💸",
+            description: `
+            ${thatItemName} ${formatWithCommas(thatItemPrice)}원, 그돈이면 ${
               data?.recommendationType === "MORE" ? "차라리" : "아껴서"
-            }`,
-            description: `${
+            } \n${
               data?.recommendationType === "MORE"
                 ? data?.suggestedItems
                     .map((item) => `${item.name} x ${item.quantity}`)
                     .join(" 또는 ")
                 : `${data?.suggestedItems[0].name} ${data?.suggestedItems[0].percentage}%`
-            } 사겠어요`,
+            } 사겠어요 \n\n #그돈이면차라리 #그돈이면아껴서`,
             imageUrl: res.infos.original.url,
             imageWidth: 400,
             imageHeight: 400,
