@@ -7,7 +7,7 @@ const ResultPageLoading = () => {
   console.log("ResultPage Loading");
 
   return (
-    <div className="min-h-inherit w-full flex flex-col justify-center items-center">
+    <div className="flex-1 w-full flex flex-col justify-center items-center">
       <div className="text-title-lg text-primary04 mb-7">
         결과지를 만들고 있어요
       </div>

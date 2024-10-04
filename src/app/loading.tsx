@@ -6,7 +6,7 @@ import loadingAnimation from "@public/animation/loading.json";
 const Loading = () => {
   console.log("LOADING");
   return (
-    <div className="min-h-inherit w-full flex justify-center items-center bg-white">
+    <div className="flex-1 w-full flex justify-center items-center bg-white">
       <Lottie animationData={loadingAnimation} style={{ height: 164 }} />;
     </div>
   );
