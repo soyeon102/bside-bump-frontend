@@ -61,13 +61,18 @@ const ResultPage = () => {
     const createBlob = async () => {
       try {
         const page = pageRef.current;
-        const canvas = await html2canvas(page as HTMLDivElement, { scale: 2 });
+        setImageBlob(null);
 
-        canvas.toBlob((blob) => {
-          if (blob !== null) {
-            setImageBlob(blob);
-          }
-        });
+        setTimeout(async () => {
+          const canvas = await html2canvas(page as HTMLDivElement, {
+            scale: 2,
+          });
+          canvas.toBlob((blob) => {
+            if (blob !== null) {
+              setImageBlob(blob);
+            }
+          });
+        }, 500);
       } catch (error) {
         alert("이미지 저장을 실패했습니다. 다시 시도해주세요");
       }
@@ -76,13 +81,13 @@ const ResultPage = () => {
     createBlob();
   }, [pageRef, searchParams, isLoading]);
 
-  const handleDownload = async () => {
+  const handleDownload = () => {
     if (imageBlob === null) return;
     saveAs(imageBlob as Blob, "result.png");
   };
 
   const handleClickShare = () => {
-    const { Kakao, location } = window;
+    const { Kakao } = window;
 
     if (imageBlob === null) return;
 
@@ -114,7 +119,7 @@ const ResultPage = () => {
             } 사겠어요`,
             imageUrl: res.infos.original.url,
             imageWidth: 400,
-            imageHeight: 800,
+            imageHeight: 400,
             link: {
               mobileWebUrl: "https://with-that-money.vercel.app",
               webUrl: "https://with-that-money.vercel.app",
@@ -136,6 +141,7 @@ const ResultPage = () => {
         alert(JSON.stringify(err));
       });
   };
+
   const handleClickReset = () => {
     window.location.replace("/ask-item");
   };
@@ -180,15 +186,8 @@ const ResultPage = () => {
               </div>
               <div className="flex flex-col items-center gap-y-8">
                 {data.suggestedItems.map((item, index) => (
-                  <div key={index}>
-                    <div className="w-full rounded-xl overflow-hidden max-h-48 relative">
-                      <Image
-                        src="/imgs/mock-image.avif"
-                        alt="이미지"
-                        width={300}
-                        height={180}
-                        className="w-full"
-                      />
+                  <div key={index} className="w-full">
+                    <div className="w-full rounded-xl overflow-hidden h-48 relative bg-[url(/imgs/mock-image.avif)] bg-cover bg-center">
                       <div className="absolute top-2 right-2 rounded-lg flex items-center py-1 px-2 bg-black bg-opacity-60">
                         {data.recommendationType === "MORE" ? (
                           <>
@@ -225,7 +224,10 @@ const ResultPage = () => {
               </div>
             </div>
 
-            <div className="flex justify-center w-full border-t border-gray04 mt-8 pt-4">
+            <div
+              className="flex justify-center w-full border-t border-gray04 mt-8 pt-4"
+              data-html2canvas-ignore={true}
+            >
               <div
                 className="inline-flex items-center cursor-pointer"
                 onClick={handleDownload}
