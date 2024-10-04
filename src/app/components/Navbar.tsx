@@ -30,8 +30,17 @@ const Navbar = () => {
     router.back();
   };
 
+  const handleClickToHome = () => {
+    router.replace("/");
+  };
+
   return findRoute ? (
-    <Header hasBack={findRoute.hasBack} onClickBack={handleClickBack} />
+    <Header
+      hasBack={findRoute.hasBack}
+      onClickBack={
+        pathname === "/ask-item" ? handleClickToHome : handleClickBack
+      }
+    />
   ) : null;
 };
 

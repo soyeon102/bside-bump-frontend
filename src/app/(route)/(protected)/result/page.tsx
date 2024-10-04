@@ -166,7 +166,9 @@ const ResultPage = () => {
                 <p className="text-gray03 font-extrabold text-sm">[결과지]</p>
                 <div className="flex flex-col justify-center items-center mt-2">
                   <p className="text-title-lg mb-1">
-                    {thatItemName} {formatWithCommas(thatItemPrice)}원,
+                    {thatItemName || data.name}{" "}
+                    {formatWithCommas(thatItemPrice || data.price.toString())}
+                    원,
                   </p>
 
                   <p className="w-fit text-title-lg shadow-[inset_0_-12px_0_rgba(152,255,187,1)]">
