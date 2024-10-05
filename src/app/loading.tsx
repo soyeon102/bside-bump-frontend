@@ -7,7 +7,7 @@ const Loading = () => {
   console.log("LOADING");
   return (
     <div className="flex-1 w-full flex justify-center items-center bg-white">
-      <Lottie animationData={loadingAnimation} style={{ height: 164 }} />;
+      <Lottie animationData={loadingAnimation} style={{ height: 164 }} />
     </div>
   );
 };

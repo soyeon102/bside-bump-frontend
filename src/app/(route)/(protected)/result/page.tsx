@@ -202,7 +202,7 @@ const ResultPage = () => {
                     className="w-full flex flex-col justify-center"
                   >
                     <div
-                      className={`min-w-28 mx-12 aspect-square  rounded-xl overflow-hidde relative bg-contain bg-no-repeat bg-center`}
+                      className={`min-w-28 w-fill-available h-auto mx-12 aspect-square  rounded-xl overflow-hidde relative bg-contain bg-no-repeat bg-center`}
                       style={{
                         backgroundImage: `url("${API_URL}/public/images/icons/${item.iconUrl}")`,
                       }}
