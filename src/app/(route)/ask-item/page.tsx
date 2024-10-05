@@ -53,7 +53,7 @@ const AskItemPage = () => {
               value={thatItemPrice ? formatWithCommas(thatItemPrice) : ""}
               onChange={handlePriceChange}
               pattern="\d*"
-              maxLength={10}
+              maxLength={9}
             />
             <span className="font-bold text-lg">원</span>
           </div>
