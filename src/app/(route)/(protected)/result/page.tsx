@@ -3,7 +3,7 @@
 
 import Button from "@/app/components/Button";
 import ResetIcon from "@public/icons/reset.svg";
-import CloseIcon from "@public/icons/close.svg";
+// import CloseIcon from "@public/icons/close.svg";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
@@ -220,24 +220,19 @@ const ResultPage = () => {
                       )}
                     </div>
                     <div className="mt-2 min-w-28 mx-12">
-                      <p className="text-center">
-                        <span className="mr-1 font-bold">{item.name}</span>
-                        <span className="bg-primary04 rounded-md px-[6px] py-[2px] text-white text-sm font-semibold inline-flex align-bottom">
-                          {data.recommendationType === "EXPENSIVE" ? (
-                            `${item.percentage}%`
-                          ) : (
-                            <span className="flex items-center">
-                              <CloseIcon />
-                              <span className="leading-snug">
-                                {item.quantity}
-                              </span>
-                            </span>
-                          )}
-                        </span>
-                      </p>
+                      <div className="text-center">
+                        <div className="mr-1 font-bold inline-block">
+                          {item.name}
+                        </div>
+                        <div className="bg-primary04 rounded-md px-[6px] py-[2px]text-sm font-semibold inline-flex text-white ">
+                          {data.recommendationType === "EXPENSIVE"
+                            ? `${item.percentage}%`
+                            : `X ${item.quantity}`}
+                        </div>
+                      </div>
                       {data.recommendationType === "EXPENSIVE" &&
                         item.percentage.toString() === "0.00" && (
-                          <p className="text-center text-sm font-semibold text-[#FF3E60] mt-3">
+                          <p className="text-center text-sm font-semibold text-[#FF3E60] mt-3 break-keep">
                             0.01%보다 작은 수치는 볼 수 없어요.
                           </p>
                         )}
