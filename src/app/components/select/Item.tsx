@@ -2,6 +2,8 @@ import { formatWithCommas } from "@/app/utils/formatWithCommas";
 import Image from "next/image";
 import CheckedIcon from "@public/icons/checked.svg";
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
 const Item = ({
   id,
   name,
@@ -19,7 +21,7 @@ const Item = ({
 }) => {
   return (
     <li
-      className={`flex flex-col items-center ${!selected && "cursor-pointer"}`}
+      className={`flex flex-col items-center cursor-pointer`}
       value={id}
       onClick={onClickItem}
     >
@@ -27,10 +29,10 @@ const Item = ({
         className={`w-full border rounded-lg overflow-hidden min-w-20 min-h-20 mb-2 relative `}
       >
         <Image
-          // src={iconUrl}
-          src="https://bump-project.o-r.kr:3000/public/images/icons/1_1.png"
+          src={`${API_URL}/public/images/icons/${iconUrl}`}
           alt={name}
           fill
+          sizes="100px"
           className={`object-cover w-full h-auto ${
             selected && "brightness-50"
           }`}

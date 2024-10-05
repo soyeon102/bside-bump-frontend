@@ -2,10 +2,12 @@
 
 import { usePathname, useRouter } from "next/navigation";
 import Header from "./Header";
+import { useStore } from "../store/useStore";
 
 const Navbar = () => {
   const pathname = usePathname();
   const router = useRouter();
+  const { resetItem } = useStore();
 
   const showHeaderRoutes = [
     {
@@ -32,6 +34,7 @@ const Navbar = () => {
 
   const handleClickToHome = () => {
     router.replace("/");
+    resetItem();
   };
 
   return findRoute ? (

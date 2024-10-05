@@ -6,7 +6,7 @@ import { customAlphabet } from "nanoid";
 import AddCircle from "@public/icons/circle-add.svg";
 import Chip from "@/app/components/select/Chip";
 import EmptyIcon from "@public/icons/empty-list.svg";
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, Suspense, useEffect, useState } from "react";
 import BottomSheet from "@/app/components/BottomSheet";
 import { formatWithCommas } from "@/app/utils/formatWithCommas";
 import usePriceChange from "@/app/hooks/usePriceChange";
@@ -57,7 +57,7 @@ const SelectPage = () => {
     selectItemList,
     addSelectItem,
     deleteItem,
-    resetItem,
+    resetItemList,
   } = useStore();
 
   const { data, isLoading, isSuccess } = useQuery<DataType[]>({
@@ -95,7 +95,7 @@ const SelectPage = () => {
   }, [isSuccess, data]);
 
   useEffect(() => {
-    resetItem();
+    resetItemList();
   }, []);
 
   const openBottomSheet = () => {
@@ -160,6 +160,7 @@ const SelectPage = () => {
 
   const handleClickItem = (item: SelectedItem) => {
     if (selectItemList.some((el) => el.id === item.id)) {
+      deleteItem(item.id);
       return;
     }
     if (selectCondition === "MORE" && selectItemList.length >= 3) {
@@ -178,6 +179,7 @@ const SelectPage = () => {
       id: item.id,
       name: item.name,
       price: Number(item.price),
+      iconUrl: item.iconUrl,
     });
   };
 
@@ -255,34 +257,36 @@ const SelectPage = () => {
                 ))}
           </div>
 
-          {isSuccess &&
-            (data.every((category) => category.products.length === 0) ? (
-              <div className="w-full h-full flex-1 flex flex-col justify-center items-center text-center gap-y-5">
-                <EmptyIcon />
-                <p className="break-keep text-gray02 font-semibold">
-                  입력하신 품목보다 높은 가격의 추천 품목이 없어요 <br />
-                  품목을 직접 추가해 보세요
-                </p>
-              </div>
-            ) : (
-              <ul className="grid grid-cols-list gap-x-2 gap-y-5 overflow-y-auto">
-                {data
-                  .find((category) => category.id === selectedCategory)
-                  ?.products.map((item, idx) => (
-                    <Item
-                      id={item.id}
-                      key={idx}
-                      name={item.name}
-                      price={item.price}
-                      iconUrl={item.iconUrl}
-                      onClickItem={() => handleClickItem(item)}
-                      selected={selectItemList.some(
-                        (selectItem) => selectItem.id === item.id
-                      )}
-                    />
-                  ))}
-              </ul>
-            ))}
+          <Suspense fallback={<>Loaidng</>}>
+            {isSuccess &&
+              (data.every((category) => category.products.length === 0) ? (
+                <div className="w-full h-full flex-1 flex flex-col justify-center items-center text-center gap-y-5">
+                  <EmptyIcon />
+                  <p className="break-keep text-gray02 font-semibold">
+                    입력하신 품목보다 높은 가격의 추천 품목이 없어요 <br />
+                    품목을 직접 추가해 보세요
+                  </p>
+                </div>
+              ) : (
+                <ul className="grid grid-cols-list gap-x-2 gap-y-5 overflow-y-auto">
+                  {data
+                    .find((category) => category.id === selectedCategory)
+                    ?.products.map((item, idx) => (
+                      <Item
+                        id={item.id}
+                        key={idx}
+                        name={item.name}
+                        price={item.price}
+                        iconUrl={item.iconUrl}
+                        onClickItem={() => handleClickItem(item)}
+                        selected={selectItemList.some(
+                          (selectItem) => selectItem.id === item.id
+                        )}
+                      />
+                    ))}
+                </ul>
+              ))}
+          </Suspense>
         </div>
       </div>
       <div className="mx-6 bg-white py-7 border-t-gray04 border-t flex gap-x-5 overflow-x-auto overflow-y-hidden mt-2">

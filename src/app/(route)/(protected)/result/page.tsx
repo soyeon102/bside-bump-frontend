@@ -193,7 +193,12 @@ const ResultPage = () => {
                     key={index}
                     className="w-full flex flex-col justify-center"
                   >
-                    <div className="min-w-28 mx-12 aspect-square  rounded-xl overflow-hidde relative bg-[url(https://bump-project.o-r.kr:3000/public/images/icons/1_1.png)] bg-contain bg-no-repeat bg-center">
+                    <div
+                      className={`min-w-28 mx-12 aspect-square  rounded-xl overflow-hidde relative bg-contain bg-no-repeat bg-center`}
+                      style={{
+                        backgroundImage: `url("${API_URL}/public/images/icons/${item.iconUrl}")`,
+                      }}
+                    >
                       {data.recommendationType === "MORE" && (
                         <div className="absolute top-2 right-2 rounded-lg flex items-center py-1 px-2 bg-black bg-opacity-60">
                           <span className="text-white text-xs">
