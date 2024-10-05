@@ -3,6 +3,7 @@
 
 import Button from "@/app/components/Button";
 import ResetIcon from "@public/icons/reset.svg";
+import CloseIcon from "@public/icons/close.svg";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
@@ -65,6 +66,7 @@ const ResultPage = () => {
 
         setTimeout(async () => {
           const canvas = await html2canvas(page as HTMLDivElement, {
+            useCORS: true,
             scale: 2,
           });
           canvas.toBlob((blob) => {
@@ -192,30 +194,33 @@ const ResultPage = () => {
                     className="w-full flex flex-col justify-center"
                   >
                     <div className="min-w-28 mx-12 aspect-square  rounded-xl overflow-hidde relative bg-[url(https://bump-project.o-r.kr:3000/public/images/icons/1_1.png)] bg-contain bg-no-repeat bg-center">
-                      <div className="absolute top-2 right-2 rounded-lg flex items-center py-1 px-2 bg-black bg-opacity-60">
-                        {data.recommendationType === "MORE" ? (
-                          <>
-                            <span className="text-white text-xs">
-                              남은 돈:{" "}
-                              {item.change === 0
-                                ? item.change
-                                : formatWithCommas(item.change.toString())}
-                              원
-                            </span>
-                          </>
-                        ) : (
+                      {data.recommendationType === "MORE" && (
+                        <div className="absolute top-2 right-2 rounded-lg flex items-center py-1 px-2 bg-black bg-opacity-60">
                           <span className="text-white text-xs">
-                            {item.percentage}%
+                            남은 돈:{" "}
+                            {item.change === 0
+                              ? item.change
+                              : formatWithCommas(item.change.toString())}
+                            원
                           </span>
-                        )}
-                      </div>
+                        </div>
+                      )}
                     </div>
                     <div className="flex items-center justify-center mt-2">
-                      <p className="mr-1 font-bold">
-                        {item.name}{" "}
-                        {data.recommendationType === "EXPENSIVE"
-                          ? `${item.percentage}%`
-                          : `X${item.quantity}`}
+                      <p className="flex items-center">
+                        <span className="mr-1 font-bold">{item.name}</span>
+                        <span className="bg-primary04 rounded-md px-[6px] py-[2px] text-white text-sm font-semibold">
+                          {data.recommendationType === "EXPENSIVE" ? (
+                            `${item.percentage}%`
+                          ) : (
+                            <span className="flex items-center">
+                              <CloseIcon />
+                              <span className="leading-snug">
+                                {item.quantity}
+                              </span>
+                            </span>
+                          )}
+                        </span>
                       </p>
                     </div>
                   </div>
