@@ -39,6 +39,10 @@ interface DataType {
   suggestedItems: RecommendedItemType[];
 }
 
+function delay(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
 const ResultPage = () => {
   const pageRef = useRef<HTMLDivElement>(null);
   const searchParams = useSearchParams();
@@ -48,12 +52,15 @@ const ResultPage = () => {
 
   const { thatItemName, thatItemPrice, selectCondition } = useStore();
   const { data, isLoading, isSuccess } = useQuery<DataType>({
-    queryKey: ["result"],
+    queryKey: ["result", id],
     queryFn: async () => {
-      const res = await fetch(`${API_URL}/result/${id}`);
-      const data = res.json();
+      await delay(3000);
+
+      const res = await fetch(`${API_URL}/result/${id}`, { cache: "no-store" });
+      const data = await res.json();
       return data;
     },
+    staleTime: 0,
   });
 
   useEffect(() => {
@@ -154,7 +161,8 @@ const ResultPage = () => {
   }
 
   return (
-    isSuccess && (
+    isSuccess &&
+    !isLoading && (
       <div
         className="px-6 pb-6 bg-result bg-cover min-h-inherit flex flex-col"
         ref={pageRef}
