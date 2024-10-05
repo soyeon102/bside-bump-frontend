@@ -46,10 +46,10 @@ const AskItemPage = () => {
         </div>
         <div>
           <p className="mb-3">가격</p>
-          <div className="flex items-center">
+          <div className="flex items-center w-full">
             <input
               placeholder="1,000"
-              className="font-bold text-lg py-3 pr-1 mr-2 flex-1 placeholder:text-lg"
+              className="font-bold text-lg py-3 pr-1 mr-2 flex-1 placeholder:text-lg w-fill-available"
               type="text"
               value={thatItemPrice ? formatWithCommas(thatItemPrice) : ""}
               onChange={handlePriceChange}

@@ -330,10 +330,10 @@ const SelectPage = () => {
           </div>
           <div className="mb-6">
             <p className="mb-3">가격</p>
-            <div className="flex items-center">
+            <div className="flex items-center w-full">
               <input
                 placeholder="1"
-                className="font-bold text-lg py-3 pr-1 mr-2 flex-1 placeholder:text-lg"
+                className="font-bold text-lg py-3 pr-1 mr-2 flex-1 placeholder:text-lg w-fill-available"
                 type="text"
                 value={addItemPrice ? formatWithCommas(addItemPrice) : ""}
                 onChange={handlePriceChange}
