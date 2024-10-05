@@ -11,7 +11,7 @@ const ResultPageLoading = () => {
       <div className="text-title-lg text-primary04 mb-7">
         결과지를 만들고 있어요
       </div>
-      <Lottie animationData={loadingAnimation} style={{ height: 164 }} />;
+      <Lottie animationData={loadingAnimation} style={{ height: 164 }} />
     </div>
   );
 };
