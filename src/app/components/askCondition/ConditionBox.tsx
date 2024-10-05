@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import RightArrow from "@public/icons/chevron-right.svg";
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
 
 const ConditionBox = ({
   topic,

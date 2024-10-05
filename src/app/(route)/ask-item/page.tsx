@@ -33,9 +33,10 @@ const AskItemPage = () => {
         <div className="mb-12">
           <p className="mb-3">소비를 망설이고 있는 것</p>
           <input
+            placeholder="오마카세"
             type="text"
             value={thatItemName}
-            className="font-bold text-lg py-3 w-full"
+            className="font-bold text-lg py-3 w-full placeholder:text-lg"
             onChange={(e: ChangeEvent<HTMLInputElement>) =>
               setThatItemName(e.currentTarget.value)
             }
@@ -52,7 +53,7 @@ const AskItemPage = () => {
               value={thatItemPrice ? formatWithCommas(thatItemPrice) : ""}
               onChange={handlePriceChange}
               pattern="\d*"
-              maxLength={15}
+              maxLength={10}
             />
             <span className="font-bold text-lg">원</span>
           </div>

@@ -334,7 +334,7 @@ const SelectPage = () => {
                 value={addItemPrice ? formatWithCommas(addItemPrice) : ""}
                 onChange={handlePriceChange}
                 pattern="\d*"
-                maxLength={15}
+                maxLength={12}
               />
               <span className="font-bold text-lg">원</span>
             </div>
