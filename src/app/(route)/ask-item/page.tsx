@@ -18,20 +18,21 @@ const AskItemPage = () => {
     <>
       <div className="px-6 flex-1">
         <div className="mb-11">
-          <p className="text-title-lg flex items-center mb-1">
+          <p className="text-title-lg mb-1">
             소비를 망설이고 있나요?
             <Image
               src="/imgs/emoji-sad.png"
               alt="sad-emoji"
               width={26}
               height={26}
-              className="inline-block ml-1"
+              className="inline-block ml-1 align-text-top"
             />
           </p>
           <p className="text-title-lg">어떤 것인지 적어주세요</p>
         </div>
         <div className="mb-12">
           <p className="mb-3">소비를 망설이고 있는 것</p>
+
           <input
             placeholder="오마카세"
             type="text"

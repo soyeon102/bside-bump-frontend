@@ -131,8 +131,8 @@ const ResultPage = () => {
             imageWidth: 400,
             imageHeight: 400,
             link: {
-              mobileWebUrl: "https://with-that-money.vercel.app",
-              webUrl: "https://with-that-money.vercel.app",
+              mobileWebUrl: `https://with-that-money.vercel.app/result?id=${data?.id}`,
+              webUrl: `https://with-that-money.vercel.app/result?id=${data?.id}`,
             },
           },
           buttons: [
@@ -182,7 +182,7 @@ const ResultPage = () => {
               <div className="flex flex-col items-center mb-10">
                 <p className="text-gray03 font-extrabold text-sm">[결과지]</p>
                 <div className="flex flex-col justify-center items-center mt-2">
-                  <p className="text-title-lg mb-1">
+                  <p className="text-title-lg mb-1 text-center">
                     {thatItemName || data.name}{" "}
                     {formatWithCommas(thatItemPrice || data.price.toString())}
                     원,
@@ -219,10 +219,10 @@ const ResultPage = () => {
                         </div>
                       )}
                     </div>
-                    <div className="flex items-center justify-center mt-2">
-                      <p className="flex items-center">
+                    <div className="mt-2 min-w-28 mx-12">
+                      <p className="text-center">
                         <span className="mr-1 font-bold">{item.name}</span>
-                        <span className="bg-primary04 rounded-md px-[6px] py-[2px] text-white text-sm font-semibold">
+                        <span className="bg-primary04 rounded-md px-[6px] py-[2px] text-white text-sm font-semibold inline-flex align-bottom">
                           {data.recommendationType === "EXPENSIVE" ? (
                             `${item.percentage}%`
                           ) : (
@@ -235,6 +235,12 @@ const ResultPage = () => {
                           )}
                         </span>
                       </p>
+                      {data.recommendationType === "EXPENSIVE" &&
+                        item.percentage.toString() === "0.00" && (
+                          <p className="text-center text-sm font-semibold text-[#FF3E60] mt-3">
+                            0.01%보다 작은 수치는 볼 수 없어요.
+                          </p>
+                        )}
                     </div>
                   </div>
                 ))}

@@ -19,7 +19,7 @@ const Chip = ({
     <div className="relative min-w-fit">
       <div
         onClick={onClickChip}
-        className={`min-h-9 font-semibold text-sm text-center rounded-half inline-block px-4 py-2 relative max-h-9 ${
+        className={`min-h-9 font-semibold text-sm text-center rounded-half inline-block px-4 py-2 relative max-h-9 whitespace-nowrap ${
           selectedCategory === value
             ? "bg-black text-primary02"
             : "bg-gray04 text-gray01"
