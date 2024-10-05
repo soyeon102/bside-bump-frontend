@@ -8,6 +8,12 @@ const nextConfig = {
 
     return config;
   },
+  images: {
+    remotePatterns: [
+      { protocol: "https", hostname: "bump-project.o-r.kr" },
+      { protocol: "http", hostname: "bump-project.o-r.kr" },
+    ],
+  },
 };
 
 export default nextConfig;

@@ -28,7 +28,7 @@ const Item = ({
       >
         <Image
           // src={iconUrl}
-          src="/imgs/mock-image.avif"
+          src="https://bump-project.o-r.kr:3000/public/images/icons/1_1.png"
           alt={name}
           fill
           className={`object-cover w-full h-auto ${

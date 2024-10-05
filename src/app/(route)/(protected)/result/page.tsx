@@ -187,8 +187,11 @@ const ResultPage = () => {
               </div>
               <div className="flex flex-col items-center gap-y-8">
                 {data.suggestedItems.map((item, index) => (
-                  <div key={index} className="w-full">
-                    <div className="w-full rounded-xl overflow-hidden h-48 relative bg-[url(/imgs/mock-image.avif)] bg-cover bg-center">
+                  <div
+                    key={index}
+                    className="w-full flex flex-col justify-center"
+                  >
+                    <div className="min-w-28 mx-12 aspect-square  rounded-xl overflow-hidde relative bg-[url(https://bump-project.o-r.kr:3000/public/images/icons/1_1.png)] bg-contain bg-no-repeat bg-center">
                       <div className="absolute top-2 right-2 rounded-lg flex items-center py-1 px-2 bg-black bg-opacity-60">
                         {data.recommendationType === "MORE" ? (
                           <>

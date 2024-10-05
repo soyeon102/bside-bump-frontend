@@ -328,7 +328,7 @@ const SelectPage = () => {
             <p className="mb-3">가격</p>
             <div className="flex items-center">
               <input
-                placeholder="1,000"
+                placeholder="1"
                 className="font-bold text-lg py-3 pr-1 mr-2 flex-1 placeholder:text-lg"
                 type="text"
                 value={addItemPrice ? formatWithCommas(addItemPrice) : ""}
@@ -338,9 +338,6 @@ const SelectPage = () => {
               />
               <span className="font-bold text-lg">원</span>
             </div>
-            <span className="text-gray02 text-sm">
-              *1,000원 이상 입력해 주세요
-            </span>
           </div>
         </div>
         <Button
@@ -348,7 +345,7 @@ const SelectPage = () => {
           disable={
             addItemName === "" ||
             addItemPrice === "" ||
-            Number(addItemPrice) < 1000
+            Number(addItemPrice) < 1
           }
           onClick={handleClickAddItem}
         >
