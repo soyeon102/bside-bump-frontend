@@ -3,11 +3,11 @@ import localFont from "next/font/local";
 import "./globals.css";
 import Navbar from "./components/Navbar";
 import Providers from "./utils/provider";
-import Script from "next/script";
 import KakaoScript from "./utils/KakaoScript";
 
 declare global {
   interface Window {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     Kakao: any;
   }
 }

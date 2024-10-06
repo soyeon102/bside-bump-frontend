@@ -184,7 +184,9 @@ const ResultPage = () => {
                 <div className="flex flex-col justify-center items-center mt-2">
                   <p className="text-title-lg mb-1 text-center">
                     {thatItemName || data.name}{" "}
-                    {formatWithCommas(thatItemPrice || data.price.toString())}
+                    <span className="text-primary04">
+                      {formatWithCommas(thatItemPrice || data.price.toString())}
+                    </span>
                     원,
                   </p>
 
