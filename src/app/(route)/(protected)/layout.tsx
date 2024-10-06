@@ -31,6 +31,8 @@ const ProtectedLayout = ({
     setIsLoading(false);
   }, [router]);
 
+  console.log("Protected Layout");
+
   const handleRedirect = () => {
     setIsLoading(true);
     setIsAlertOpen(false);
