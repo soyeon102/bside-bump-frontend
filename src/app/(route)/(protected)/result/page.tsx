@@ -192,8 +192,8 @@ const ResultPage = () => {
 
                   <p className="w-fit text-title-lg shadow-[inset_0_-12px_0_rgba(152,255,187,1)]">
                     {selectCondition === "MORE"
-                      ? "그 돈이면 이런 것들을 살 수 있어요!"
-                      : "그 돈이면 이만큼이나 모아요!"}
+                      ? "그 돈이면 이런 걸 살 수 있어요!"
+                      : "그 돈이면 이만큼 모을 수 있어요!"}
                   </p>
                 </div>
               </div>
