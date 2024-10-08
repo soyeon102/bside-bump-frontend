@@ -1,5 +1,5 @@
 import Link from "next/link";
-import Button from "../components/Button";
+import Button from "@/components/Button";
 import Image from "next/image";
 
 const HomePage = () => {
@@ -12,6 +12,7 @@ const HomePage = () => {
           width={220}
           height={66}
           style={{ width: "auto" }}
+          priority
         />
         <p className="text-center text-title-sm text-gray02 leading-tight">
           당장의 과소비를 막고 싶은 당신에게 <br />

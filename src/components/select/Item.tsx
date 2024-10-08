@@ -1,6 +1,6 @@
-import { formatWithCommas } from "@/app/utils/formatWithCommas";
+import { formatWithCommas } from "@/utils/formatWithCommas";
 import Image from "next/image";
-import CheckedIcon from "@public/icons/checked.svg";
+import { CheckedIcon } from "../icons";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 

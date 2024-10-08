@@ -1,4 +1,4 @@
-import LeftArrow from "@public/icons/chevron-left.svg";
+import { ChevronLeftIcon } from "./icons";
 
 const Header = ({
   hasBack = false,
@@ -11,7 +11,7 @@ const Header = ({
     <nav className="flex justify-between items-center h-11 mb-7 px-6 relative z-0">
       <div className="flex justify-start flex-1">
         {hasBack && (
-          <LeftArrow className="cursor-pointer" onClick={onClickBack} />
+          <ChevronLeftIcon className="cursor-pointer" onClick={onClickBack} />
         )}
       </div>
       <div className="flex-1"></div>

@@ -1,4 +1,4 @@
-import CloseIcon from "@public/icons/circle-close.svg";
+import { CircleCloseIcon } from "../icons";
 
 const Chip = ({
   selectedCategory,
@@ -33,7 +33,7 @@ const Chip = ({
           className="absolute top-[-4px] right-[-4px] border-gray04 border rounded-full	p-[2px] bg-white cursor-pointer"
           onClick={onClickDelete}
         >
-          <CloseIcon />
+          <CircleCloseIcon />
         </span>
       )}
     </div>

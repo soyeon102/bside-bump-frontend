@@ -1,7 +1,7 @@
 "use client";
 
-import ConditionBox from "@/app/components/askCondition/ConditionBox";
-import { useStore } from "@/app/store/useStore";
+import ConditionBox from "@/components/askCondition/ConditionBox";
+import { useStore } from "@/store/useStore";
 import Image from "next/image";
 import Link from "next/link";
 

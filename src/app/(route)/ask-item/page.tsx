@@ -1,12 +1,12 @@
 "use client";
 
-import Button from "@/app/components/Button";
-import { useStore } from "@/app/store/useStore";
+import Button from "@/components/Button";
+import { useStore } from "@/store/useStore";
 import Image from "next/image";
 import Link from "next/link";
 import { ChangeEvent } from "react";
-import { formatWithCommas } from "@/app/utils/formatWithCommas";
-import usePriceChange from "@/app/hooks/usePriceChange";
+import { formatWithCommas } from "@/utils/formatWithCommas";
+import usePriceChange from "@/hooks/usePriceChange";
 
 const AskItemPage = () => {
   const { thatItemName, thatItemPrice, setThatItemName, setThatItemPrice } =

@@ -2,9 +2,9 @@
 
 import { useRouter, useSearchParams } from "next/navigation";
 
-import { useStore } from "@/app/store/useStore";
+import { useStore } from "@/store/useStore";
 import { useEffect, useState } from "react";
-import Alert from "@/app/components/Alert";
+import Alert from "@/components/Alert";
 
 const ProtectedLayout = ({
   children,

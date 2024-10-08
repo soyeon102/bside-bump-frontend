@@ -1,8 +1,8 @@
 "use client";
 
-import Image from "next/image";
-import RightArrow from "@public/icons/chevron-right.svg";
 import { useRef } from "react";
+import Image from "next/image";
+import { ChevronRightIcon } from "../icons";
 
 const ConditionBox = ({
   topic,
@@ -33,7 +33,7 @@ const ConditionBox = ({
           {text}
         </p>
       </div>
-      <RightArrow />
+      <ChevronRightIcon />
     </div>
   );
 };

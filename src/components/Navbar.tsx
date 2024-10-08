@@ -1,8 +1,8 @@
 "use client";
 
 import { usePathname, useRouter } from "next/navigation";
+import { useStore } from "@/store/useStore";
 import Header from "./Header";
-import { useStore } from "../store/useStore";
 
 const Navbar = () => {
   const pathname = usePathname();
