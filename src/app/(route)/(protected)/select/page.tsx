@@ -3,7 +3,7 @@
 import { ChangeEvent, Suspense, useEffect, useState } from "react";
 import { customAlphabet } from "nanoid";
 import Button from "@/components/Button";
-import Chip from "@/components/select/Chip";
+import Chip from "@/components/Chip";
 import Item from "@/components/select/Item";
 import Alert from "@/components/Alert";
 import { useStore } from "@/store/useStore";
