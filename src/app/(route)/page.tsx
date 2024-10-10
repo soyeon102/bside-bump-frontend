@@ -22,8 +22,7 @@ const HomePage = () => {
           src="/imgs/animation-wallet.gif"
           alt="지갑 애니메이션"
           width={288}
-          height={316}
-          style={{ height: "auto" }}
+          height={288}
           priority
         />
       </div>
