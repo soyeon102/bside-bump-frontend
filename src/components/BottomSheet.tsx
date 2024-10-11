@@ -28,7 +28,7 @@ const BottomSheet = ({
       onClick={onClose}
     >
       <div
-        className={`bg-white rounded-t-3xl w-full max-w-layout pt-4 transform transition-transform duration-300 ${
+        className={`bg-white rounded-t-3xl w-full sm:max-w-layout pt-4 transform transition-transform duration-300 ${
           isOpen ? "translate-y-0" : "translate-y-full"
         }`}
         onClick={(e) => e.stopPropagation()}
