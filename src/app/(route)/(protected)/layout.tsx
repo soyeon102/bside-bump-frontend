@@ -31,8 +31,6 @@ const ProtectedLayout = ({
     setIsLoading(false);
   }, [router]);
 
-  console.log("Protected Layout");
-
   const handleRedirect = () => {
     setIsLoading(true);
     setIsAlertOpen(false);
@@ -48,7 +46,7 @@ const ProtectedLayout = ({
       <Alert
         isOpen={isAlertOpen}
         text={"망설이는 품목을 입력해주세요"}
-        onClose={() => setIsAlertOpen(false)}
+        onClose={handleRedirect}
         onClickButton={handleRedirect}
       />
     </>
