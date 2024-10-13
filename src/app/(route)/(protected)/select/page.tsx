@@ -1,6 +1,6 @@
 "use client";
 
-import { ChangeEvent, Suspense, useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { customAlphabet } from "nanoid";
 import Button from "@/components/Button";
 import Chip from "@/components/Chip";
@@ -21,14 +21,11 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 type Condition = "MORE" | "EXPENSIVE";
 
-interface ItemType {
+interface SelectedItem {
+  id: number;
   name: string;
   price: string;
   iconUrl?: string;
-}
-
-interface SelectedItem extends ItemType {
-  id: number;
 }
 
 interface DataType {
@@ -258,36 +255,34 @@ const SelectPage = () => {
                 ))}
           </div>
 
-          <Suspense fallback={<>Loaidng</>}>
-            {isSuccess &&
-              (data.every((category) => category.products.length === 0) ? (
-                <div className="w-full h-full flex-1 flex flex-col justify-center items-center text-center gap-y-5">
-                  <AddItemIcon />
-                  <p className="break-keep text-gray02 font-semibold">
-                    입력하신 품목보다 높은 가격의 추천 품목이 없어요 <br />
-                    품목을 직접 추가해 보세요
-                  </p>
-                </div>
-              ) : (
-                <ul className="grid grid-cols-list gap-x-2 gap-y-5 overflow-y-auto">
-                  {data
-                    .find((category) => category.id === selectedCategory)
-                    ?.products.map((item, idx) => (
-                      <Item
-                        id={item.id}
-                        key={idx}
-                        name={item.name}
-                        price={item.price}
-                        iconUrl={item.iconUrl}
-                        onClickItem={() => handleClickItem(item)}
-                        selected={selectItemList.some(
-                          (selectItem) => selectItem.id === item.id
-                        )}
-                      />
-                    ))}
-                </ul>
-              ))}
-          </Suspense>
+          {isSuccess &&
+            (data.every((category) => category.products.length === 0) ? (
+              <div className="w-full h-full flex-1 flex flex-col justify-center items-center text-center gap-y-5">
+                <AddItemIcon />
+                <p className="break-keep text-gray02 font-semibold">
+                  입력하신 품목보다 높은 가격의 추천 품목이 없어요 <br />
+                  품목을 직접 추가해 보세요
+                </p>
+              </div>
+            ) : (
+              <ul className="grid grid-cols-list gap-x-2 gap-y-5 overflow-y-auto">
+                {data
+                  .find((category) => category.id === selectedCategory)
+                  ?.products.map((item, idx) => (
+                    <Item
+                      id={item.id}
+                      key={idx}
+                      name={item.name}
+                      price={item.price}
+                      iconUrl={item.iconUrl}
+                      onClickItem={() => handleClickItem(item)}
+                      selected={selectItemList.some(
+                        (selectItem) => selectItem.id === item.id
+                      )}
+                    />
+                  ))}
+              </ul>
+            ))}
         </div>
       </div>
       <div className="mx-6 bg-white py-7 border-t-gray04 border-t flex gap-x-5 overflow-x-auto overflow-y-hidden mt-2">
