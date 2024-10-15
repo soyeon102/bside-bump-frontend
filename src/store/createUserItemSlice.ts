@@ -1,27 +1,24 @@
 import { StateCreator } from "zustand";
+import { Condition, SelectedItem } from "@/types/item";
 
-type SelectedItem = {
-  id: number;
-  name: string;
-  price: number;
-  iconUrl?: string;
-};
-
-type Condition = "MORE" | "EXPENSIVE";
-
-export interface UserItemSlice {
+type ItemState = {
   thatItemName: string;
   thatItemPrice: string;
   selectCondition: Condition | null;
   selectItemList: SelectedItem[];
-  setThatItemName: (itemName: string) => void;
-  setThatItemPrice: (itemPrice: string) => void;
+};
+
+type ItemAction = {
+  setThatItemName: (name: string) => void;
+  setThatItemPrice: (price: string) => void;
   setSelectCondition: (condition: Condition) => void;
   addSelectItem: (item: SelectedItem) => void;
   deleteItem: (id: number) => void;
   resetItem: () => void;
   resetItemList: () => void;
-}
+};
+
+export type UserItemSlice = ItemState & ItemAction;
 
 export const createUserItemSlice: StateCreator<UserItemSlice> = (set) => ({
   thatItemName: "",
