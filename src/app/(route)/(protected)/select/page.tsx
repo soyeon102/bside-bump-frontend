@@ -16,8 +16,7 @@ import usePriceChange from "@/hooks/usePriceChange";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import Loading from "@/app/loading";
 import { useRouter } from "next/navigation";
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
+import { API_URL } from "@/constants/url.const";
 
 type Condition = "MORE" | "EXPENSIVE";
 

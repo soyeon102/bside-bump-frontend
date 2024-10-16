@@ -15,7 +15,7 @@ import { useSearchParams } from "next/navigation";
 import { formatWithCommas } from "@/utils/formatWithCommas";
 import ResultPageLoading from "./loading";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
+import { API_URL } from "@/constants/url.const";
 
 type Condition = "MORE" | "EXPENSIVE";
 
