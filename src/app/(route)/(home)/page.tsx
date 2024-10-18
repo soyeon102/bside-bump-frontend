@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Button from "@/components/Button";
-import Image from "next/image";
 import Logo from "@/components/Logo";
+import HomeAnimation from "./_components/HomeAnimation";
 
 const HomePage = () => {
   return (
@@ -12,13 +12,7 @@ const HomePage = () => {
           당장의 과소비를 막고 싶은 당신에게 <br />
           추천하는 과소비 방지 서비스
         </p>
-        <Image
-          src="/imgs/animation-wallet.gif"
-          alt="지갑 애니메이션"
-          width={288}
-          height={288}
-          priority
-        />
+        <HomeAnimation />
       </div>
       <Link href="/ask-item" className="mb-7">
         <Button color="home">시작할게요</Button>
