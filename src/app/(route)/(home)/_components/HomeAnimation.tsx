@@ -1,15 +1,14 @@
 "use client";
 
-import Lottie from "lottie-react";
-import walletAnimation from "@public/animation/animation_wallet.json";
+import { CldImage } from "next-cloudinary";
 
 const HomeAnimation = () => {
   return (
-    <Lottie
-      loop={true}
-      animationData={walletAnimation}
-      height={288}
-      width={288}
+    <CldImage
+      width={300}
+      height={60}
+      src="animation-wallet_fnoph2"
+      alt="home animation"
     />
   );
 };
