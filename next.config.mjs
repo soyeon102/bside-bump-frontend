@@ -5,7 +5,7 @@ const nextConfig = {
     remotePatterns: [
       { protocol: "https", hostname: "bump-project.o-r.kr" },
       { protocol: "http", hostname: "bump-project.o-r.kr" },
-      { hostname: "res.cloudinary.com" },
+      { protocol: "https", hostname: "res.cloudinary.com" },
     ],
   },
 };
