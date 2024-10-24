@@ -7,8 +7,10 @@ const HomeAnimation = () => {
     <CldImage
       width={300}
       height={60}
+      format="gif"
       src="animation-wallet_fnoph2"
       alt="home animation"
+      style={{ width: "auto" }}
     />
   );
 };
