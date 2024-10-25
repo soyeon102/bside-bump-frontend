@@ -8,6 +8,7 @@ const HomeAnimation = () => {
       width={300}
       height={60}
       format="gif"
+      quality="auto"
       src="animation-wallet_fnoph2"
       alt="home animation"
       style={{ width: "auto" }}
