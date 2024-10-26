@@ -15,7 +15,7 @@ import { useSearchParams } from "next/navigation";
 import { formatWithCommas } from "@/utils/formatWithCommas";
 import ResultPageLoading from "./loading";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
+import { API_URL } from "@/constants/url.const";
 
 type Condition = "MORE" | "EXPENSIVE";
 
@@ -160,129 +160,140 @@ const ResultPage = () => {
   return (
     isSuccess &&
     !isLoading && (
-      <div
-        className="px-6 pb-6 bg-result bg-cover min-h-inherit flex flex-col"
-        ref={pageRef}
-      >
-        <div className="w-full h-3 mt-2 mb-[2px]">
-          <Image
-            src="/imgs/result-pattern.png"
-            alt="패턴"
-            width={500}
-            height={12}
-            className="bg-repeat w-full"
-          />
-        </div>
-        <div className="bg-white flex-1 rounded-b-lg p-6 flex">
-          <div className="flex-1 flex flex-col">
-            <div className="flex-1">
-              <div className="flex flex-col items-center mb-10">
-                <p className="text-gray03 font-extrabold text-sm">[결과지]</p>
-                <div className="flex flex-col justify-center items-center mt-2">
-                  <p className="text-title-lg mb-1 text-center">
-                    {thatItemName || data.name}{" "}
-                    <span className="text-primary04">
-                      {formatWithCommas(thatItemPrice || data.price.toString())}
-                    </span>
-                    원,
-                  </p>
+      <>
+        <div
+          className="px-6 pb-6 min-h-inherit flex flex-col relative z-10"
+          ref={pageRef}
+        >
+          <div className="w-full h-3 mt-2 mb-[2px]">
+            <Image
+              src="/imgs/result-pattern.png"
+              alt="패턴"
+              width={500}
+              height={12}
+              className="bg-repeat w-full"
+            />
+          </div>
+          <div className="bg-white flex-1 rounded-b-lg p-6 flex">
+            <div className="flex-1 flex flex-col">
+              <div className="flex-1">
+                <div className="flex flex-col items-center mb-10">
+                  <p className="text-gray03 font-extrabold text-sm">[결과지]</p>
+                  <div className="flex flex-col justify-center items-center mt-2">
+                    <p className="text-title-lg mb-1 text-center">
+                      {thatItemName || data.name}{" "}
+                      <span className="text-primary04">
+                        {formatWithCommas(
+                          thatItemPrice || data.price.toString()
+                        )}
+                      </span>
+                      원,
+                    </p>
 
-                  <p className="w-fit text-title-lg shadow-[inset_0_-12px_0_rgba(152,255,187,1)]">
-                    {selectCondition === "MORE"
-                      ? "그 돈이면 이런 걸 살 수 있어요!"
-                      : "그 돈이면 이만큼 모을 수 있어요!"}
-                  </p>
+                    <p className="w-fit text-title-lg shadow-[inset_0_-12px_0_rgba(152,255,187,1)]">
+                      {selectCondition === "MORE"
+                        ? "그 돈이면 이런 걸 살 수 있어요!"
+                        : "그 돈이면 이만큼 모을 수 있어요!"}
+                    </p>
+                  </div>
                 </div>
-              </div>
-              <div className="flex flex-col items-center gap-y-8">
-                {data.suggestedItems.map((item, index) => (
-                  <div
-                    key={index}
-                    className="w-full flex flex-col justify-center"
-                  >
+                <div className="flex flex-col items-center gap-y-8">
+                  {data.suggestedItems.map((item, index) => (
                     <div
-                      className={`min-w-28 w-fill-available h-auto mx-12 aspect-square  rounded-xl overflow-hidde relative bg-contain bg-no-repeat bg-center`}
-                      style={{
-                        backgroundImage: `url("${API_URL}/public/images/icons/${item.iconUrl}")`,
-                      }}
+                      key={index}
+                      className="w-full flex flex-col justify-center"
                     >
-                      {data.recommendationType === "MORE" && (
-                        <div className="absolute top-2 right-2 rounded-lg flex items-center py-1 px-2 bg-black bg-opacity-60">
-                          <span className="text-white text-xs">
-                            남은 돈:{" "}
-                            {item.change === 0
-                              ? item.change
-                              : formatWithCommas(item.change.toString())}
-                            원
-                          </span>
+                      <div
+                        className={`min-w-28 w-fill-available h-auto mx-12 aspect-square  rounded-xl overflow-hidde relative bg-contain bg-no-repeat bg-center`}
+                        style={{
+                          backgroundImage: `url("${API_URL}/public/images/icons/${item.iconUrl}")`,
+                        }}
+                      >
+                        {data.recommendationType === "MORE" && (
+                          <div className="absolute top-2 right-2 rounded-lg flex items-center py-1 px-2 bg-black bg-opacity-60">
+                            <span className="text-white text-xs">
+                              남은 돈:{" "}
+                              {item.change === 0
+                                ? item.change
+                                : formatWithCommas(item.change.toString())}
+                              원
+                            </span>
+                          </div>
+                        )}
+                      </div>
+                      <div className="mt-2 min-w-28 mx-12">
+                        <div className="text-center">
+                          <div className="mr-1 font-bold inline-block">
+                            {item.name}
+                          </div>
+                          <div className="bg-primary04 rounded-md px-[6px] py-[2px]text-sm font-semibold inline-flex text-white ">
+                            {data.recommendationType === "EXPENSIVE"
+                              ? `${item.percentage}%`
+                              : `X ${item.quantity}`}
+                          </div>
                         </div>
+                        {data.recommendationType === "EXPENSIVE" &&
+                          item.percentage.toString() === "0.00" && (
+                            <p className="text-center text-sm font-semibold text-[#FF3E60] mt-3 break-keep">
+                              0.01%보다 작은 수치는 볼 수 없어요.
+                            </p>
+                          )}
+                      </div>
+                      {index < data.suggestedItems.length - 1 && (
+                        <hr className="mt-5" />
                       )}
                     </div>
-                    <div className="mt-2 min-w-28 mx-12">
-                      <div className="text-center">
-                        <div className="mr-1 font-bold inline-block">
-                          {item.name}
-                        </div>
-                        <div className="bg-primary04 rounded-md px-[6px] py-[2px]text-sm font-semibold inline-flex text-white ">
-                          {data.recommendationType === "EXPENSIVE"
-                            ? `${item.percentage}%`
-                            : `X ${item.quantity}`}
-                        </div>
-                      </div>
-                      {data.recommendationType === "EXPENSIVE" &&
-                        item.percentage.toString() === "0.00" && (
-                          <p className="text-center text-sm font-semibold text-[#FF3E60] mt-3 break-keep">
-                            0.01%보다 작은 수치는 볼 수 없어요.
-                          </p>
-                        )}
-                    </div>
-                    {index < data.suggestedItems.length - 1 && (
-                      <hr className="mt-5" />
-                    )}
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
-            </div>
 
-            <div
-              className="flex justify-center w-full border-t border-gray04 mt-8 pt-4"
-              data-html2canvas-ignore={true}
-            >
               <div
-                className="inline-flex items-center cursor-pointer"
-                onClick={handleDownload}
+                className="flex justify-center w-full border-t border-gray04 mt-8 pt-4"
+                data-html2canvas-ignore={true}
               >
-                <span className="mr-1 text-sm text-[#B2B9C0] font-bold">
-                  이미지로 저장
-                </span>
-                <DownloadIcon />
+                <div
+                  className="inline-flex items-center cursor-pointer"
+                  onClick={handleDownload}
+                >
+                  <span className="mr-1 text-sm text-[#B2B9C0] font-bold">
+                    이미지로 저장
+                  </span>
+                  <DownloadIcon />
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        <div
-          className="rounded-t-lg p-4 bg-white border-t border-dashed"
-          data-html2canvas-ignore={true}
-        >
-          <div className="text-center rounded-lg bg-[#ECF7F9] py-3 mb-5 font-semibold leading-snug text-gray01">
-            과소비 방지 리포트가 만들어졌습니다. <br />
-            친구에게 공유해 보세요.
+          <div
+            className="rounded-t-lg p-4 bg-white border-t border-dashed"
+            data-html2canvas-ignore={true}
+          >
+            <div className="text-center rounded-lg bg-[#ECF7F9] py-3 mb-5 font-semibold leading-snug text-gray01">
+              과소비 방지 리포트가 만들어졌습니다. <br />
+              친구에게 공유해 보세요.
+            </div>
+
+            <div className="flex">
+              <Button color="plain" onClick={handleClickShare}>
+                공유할래요
+              </Button>
+              <button
+                type="button"
+                className={`h-14 py-2.5 px-5 ml-2 rounded-xl border border-black`}
+                onClick={handleClickReset}
+              >
+                <ResetIcon />
+              </button>
+            </div>
           </div>
 
-          <div className="flex">
-            <Button color="plain" onClick={handleClickShare}>
-              공유할래요
-            </Button>
-            <button
-              type="button"
-              className={`h-14 py-2.5 px-5 ml-2 rounded-xl border border-black`}
-              onClick={handleClickReset}
-            >
-              <ResetIcon />
-            </button>
-          </div>
+          <Image
+            src={"/imgs/result-background.png"}
+            alt="결과지 배경"
+            fill
+            className="-z-10 object-cover"
+          />
         </div>
-      </div>
+      </>
     )
   );
 };

@@ -1,8 +1,7 @@
 import { formatWithCommas } from "@/utils/formatWithCommas";
 import Image from "next/image";
 import { CheckedIcon } from "../icons";
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
+import { API_URL } from "@/constants/url.const";
 
 const Item = ({
   id,

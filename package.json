@@ -15,8 +15,10 @@
     "lottie-react": "^2.4.0",
     "nanoid": "^5.0.7",
     "next": "14.2.13",
+    "next-cloudinary": "^6.16.0",
     "react": "^18",
     "react-dom": "^18",
+    "sharp": "^0.33.5",
     "zustand": "^5.0.0-rc.2"
   },
   "devDependencies": {

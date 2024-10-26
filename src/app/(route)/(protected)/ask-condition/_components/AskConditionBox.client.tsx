@@ -2,21 +2,38 @@
 
 import { useRef } from "react";
 import Image from "next/image";
-import { ChevronRightIcon } from "../icons";
+import { ChevronRightIcon } from "@/components/icons";
+import { useStore } from "@/store/useStore";
 
-const ConditionBox = ({
+type Condition = "MORE" | "EXPENSIVE";
+
+const AskConditionBox = ({
   topic,
   text,
   imgSrc,
+  conditionType,
 }: {
   topic: string;
   text: string;
   imgSrc: string;
+  conditionType: Condition;
 }) => {
   const textRef = useRef<HTMLParagraphElement>(null);
+  const { setSelectCondition } = useStore();
+
+  const handleClickBox = () => {
+    if (conditionType === "EXPENSIVE") {
+      setSelectCondition("EXPENSIVE");
+    } else if (conditionType === "MORE") {
+      setSelectCondition("MORE");
+    }
+  };
 
   return (
-    <div className="bg-gray04 px-3 py-5 rounded-2xl flex items-center hover:shadow-innerBorder">
+    <div
+      className="bg-gray04 px-3 py-5 rounded-2xl flex items-center hover:shadow-innerBorder"
+      onClick={handleClickBox}
+    >
       <Image
         src={imgSrc}
         alt={topic}
@@ -38,4 +55,4 @@ const ConditionBox = ({
   );
 };
 
-export default ConditionBox;
+export default AskConditionBox;

@@ -1,4 +1,4 @@
-import { CircleCloseIcon } from "../icons";
+import { CircleCloseIcon } from "./icons";
 
 const Chip = ({
   selectedCategory,
