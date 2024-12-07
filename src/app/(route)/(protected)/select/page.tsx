@@ -17,6 +17,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import Loading from "@/app/loading";
 import { useRouter } from "next/navigation";
 import { API_URL } from "@/constants/url.const";
+import SearchIcon from "@/components/icons/SearchIcon";
 
 type Condition = "MORE" | "EXPENSIVE";
 
@@ -310,24 +311,29 @@ const SelectPage = () => {
 
       {/* 모달 */}
       <BottomSheet isOpen={isBottomSheetOpen} onClose={closeBottomSheet}>
-        <div>
-          <div className="mb-12">
-            <p className="mb-3">직접 추가할 품목</p>
+        <div className="flex flex-col gap-7">
+          <div>
+            <p className="mb-3">
+              직접 추가할 품목 <span className="text-warning">*</span>
+            </p>
             <input
               type="text"
+              placeholder="우육면"
               value={addItemName}
-              className="font-bold text-lg py-3 w-full"
+              className="font-bold text-lg py-3 w-full placeholder:text-lg"
               onChange={(e: ChangeEvent<HTMLInputElement>) =>
                 setAddItemName(e.target.value)
               }
               maxLength={20}
             />
           </div>
-          <div className="mb-6">
-            <p className="mb-3">가격</p>
+          <div>
+            <p className="mb-3">
+              가격 <span className="text-warning">*</span>
+            </p>
             <div className="flex items-center w-full">
               <input
-                placeholder="1"
+                placeholder="1,000"
                 className="font-bold text-lg py-3 pr-1 mr-2 flex-1 placeholder:text-lg w-fill-available"
                 type="text"
                 value={addItemPrice ? formatWithCommas(addItemPrice) : ""}
@@ -336,6 +342,16 @@ const SelectPage = () => {
                 maxLength={12}
               />
               <span className="font-bold text-lg">원</span>
+            </div>
+          </div>
+          <div className="mb-6">
+            <div className="mb-3 flex items-center justify-between flex-wrap">
+              <p>이미지 직접 추가</p>
+              <p className="text-sm">*선택한 이미지는 결과지에 표시돼요</p>
+            </div>
+            <div className="h-12 border-gray03 border rounded-md p-3 flex items-center cursor-pointer">
+              <p className="mr-2">이미지 검색</p>
+              <SearchIcon />
             </div>
           </div>
         </div>
