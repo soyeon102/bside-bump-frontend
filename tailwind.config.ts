@@ -20,7 +20,7 @@ const config: Config = {
         gray02: "#4A4A4C",
         gray03: "#CED1D6",
         gray04: "#F5F5F6",
-        warning: "#FF3E60",
+        warning: "#FF3333",
       },
       width: {
         layout: "var(--min-layout-size)",

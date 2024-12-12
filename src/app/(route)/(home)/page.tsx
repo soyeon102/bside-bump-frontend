@@ -19,7 +19,10 @@ const HomePage = () => {
       </Link>
       <Link href="/community" className="mb-7">
         <Button color="plain">
-          다른 사람 결과 구경가기 <span>NEW</span>
+          다른 사람 결과 구경가기{" "}
+          <span className="absolute right-3 -top-1 text-white text-xs bg-warning py-1 px-2 rounded-md">
+            NEW
+          </span>
         </Button>
       </Link>
     </div>
