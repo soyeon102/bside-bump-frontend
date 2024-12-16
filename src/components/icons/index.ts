@@ -9,6 +9,8 @@ import DownloadIcon from "./DownloadIcon";
 import AddItemIcon from "./AddItemIcon";
 import ResetIcon from "./ResetIcon";
 import UserIcon from "./UserIcon";
+import KakaoIcon from "./KakaoIcon";
+import LinkIcon from "./LinkIcon";
 
 export {
   CircleAddIcon,
@@ -22,4 +24,6 @@ export {
   AddItemIcon,
   ResetIcon,
   UserIcon,
+  KakaoIcon,
+  LinkIcon,
 };

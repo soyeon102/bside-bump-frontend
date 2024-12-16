@@ -3,7 +3,7 @@ import { IconProps } from "./icon.types";
 const DownloadIcon = ({
   width = 20,
   height = 20,
-  color = "#CDD1D6",
+  color = "#4A4A4C",
   ...props
 }: IconProps) => {
   return (
