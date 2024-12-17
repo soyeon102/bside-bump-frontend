@@ -61,6 +61,21 @@ const config: Config = {
         result: "url('/imgs/result-background.png')",
         home: "url(/imgs/home-background.png)",
       },
+      keyframes: {
+        "fade-in": {
+          "0%": {
+            opacity: "0",
+            transform: "translateY(0)",
+          },
+          "100%": {
+            opacity: "1",
+            transform: "translateY(-1rem)",
+          },
+        },
+      },
+      animation: {
+        "fade-in": "fade-in 0.23s ease-out forwards",
+      },
     },
   },
   plugins: [],

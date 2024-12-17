@@ -14,6 +14,7 @@ const Button = ({
   const colorVariants = {
     plain: "bg-black text-primary02",
     home: "bg-primary03 text-black",
+    transparent: "bg-white border border-gray01",
   };
   return (
     <button
