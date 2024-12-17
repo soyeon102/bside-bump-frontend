@@ -25,7 +25,7 @@ export const metadata: Metadata = {
     title: "그돈이면",
     description: "과소비 방지 서비스, 그돈이면",
     images: ["/imgs/metadata.png"],
-    url: "https://with-that-money.vercel.app",
+    url: process.env.NEXT_PUBLIC_BASE_URL,
   },
   twitter: {
     card: "summary_large_image",
