@@ -4,14 +4,19 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Button from "@/components/Button";
-import { DownloadIcon, ResetIcon } from "@/components/icons";
+import {
+  DownloadIcon,
+  KakaoIcon,
+  LinkIcon,
+  ResetIcon,
+} from "@/components/icons";
 
 import html2canvas from "html2canvas";
 import { saveAs } from "file-saver";
 import { useRef } from "react";
 import { useStore } from "@/store/useStore";
 import { useQuery } from "@tanstack/react-query";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { formatWithCommas } from "@/utils/formatWithCommas";
 import ResultPageLoading from "./loading";
 
@@ -44,8 +49,10 @@ const ResultPage = () => {
   const pageRef = useRef<HTMLDivElement>(null);
   const searchParams = useSearchParams();
   const id = searchParams.get("id");
+  const router = useRouter();
 
   const [imageBlob, setImageBlob] = useState<Blob | null>(null);
+  const [isToast, setIsToast] = useState<boolean>(false);
 
   const { thatItemName, thatItemPrice, selectCondition } = useStore();
   const { data, isLoading, isSuccess } = useQuery<DataType>({
@@ -88,6 +95,15 @@ const ResultPage = () => {
     createBlob();
   }, [pageRef, searchParams, isLoading]);
 
+  const handleCopy = async (text: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      setIsToast(true);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   const handleDownload = () => {
     if (imageBlob === null) return;
     saveAs(imageBlob as Blob, "result.png");
@@ -128,16 +144,16 @@ const ResultPage = () => {
             imageWidth: 400,
             imageHeight: 400,
             link: {
-              mobileWebUrl: `https://with-that-money.vercel.app/result?id=${data?.id}`,
-              webUrl: `https://with-that-money.vercel.app/result?id=${data?.id}`,
+              mobileWebUrl: `${process.env.NEXT_PUBLIC_BASE_URL}/result?id=${data?.id}`,
+              webUrl: `${process.env.NEXT_PUBLIC_BASE_URL}/result?id=${data?.id}`,
             },
           },
           buttons: [
             {
               title: "자세히 보기",
               link: {
-                mobileWebUrl: `https://with-that-money.vercel.app/result?id=${data?.id}`,
-                webUrl: `https://with-that-money.vercel.app/result?id=${data?.id}`,
+                mobileWebUrl: `${process.env.NEXT_PUBLIC_BASE_URL}/result?id=${data?.id}`,
+                webUrl: `${process.env.NEXT_PUBLIC_BASE_URL}/result?id=${data?.id}`,
               },
             },
           ],
@@ -152,6 +168,14 @@ const ResultPage = () => {
   const handleClickReset = () => {
     window.location.replace("/ask-item");
   };
+
+  useEffect(() => {
+    if (isToast) {
+      setTimeout(() => {
+        setIsToast(false);
+      }, 2500);
+    }
+  }, [isToast]);
 
   if (isLoading) {
     return <ResultPageLoading />;
@@ -204,7 +228,7 @@ const ResultPage = () => {
                       className="w-full flex flex-col justify-center"
                     >
                       <div
-                        className={`min-w-28 w-fill-available h-auto mx-12 aspect-square  rounded-xl overflow-hidde relative bg-contain bg-no-repeat bg-center`}
+                        className={`min-w-28 w-fill-available h-auto mx-12 aspect-square rounded-xl overflow-hidde relative bg-contain bg-no-repeat bg-center`}
                         style={{
                           backgroundImage: `url("${API_URL}/public/images/icons/${item.iconUrl}")`,
                         }}
@@ -248,41 +272,77 @@ const ResultPage = () => {
               </div>
 
               <div
-                className="flex justify-center w-full border-t border-gray04 mt-8 pt-4"
+                className="flex justify-center w-full mt-8"
                 data-html2canvas-ignore={true}
               >
                 <div
                   className="inline-flex items-center cursor-pointer"
-                  onClick={handleDownload}
+                  onClick={handleClickReset}
                 >
-                  <span className="mr-1 text-sm text-[#B2B9C0] font-bold">
-                    이미지로 저장
+                  <span className="mr-1 text-sm text-gray02 font-bold">
+                    다시하기
                   </span>
-                  <DownloadIcon />
+                  <ResetIcon />
                 </div>
               </div>
             </div>
           </div>
           <div
-            className="rounded-t-lg p-4 bg-white border-t border-dashed"
+            className="rounded-lg p-4 bg-white border-t border-dashed"
             data-html2canvas-ignore={true}
           >
-            <div className="text-center rounded-lg bg-[#ECF7F9] py-3 mb-5 font-semibold leading-snug text-gray01">
-              과소비 방지 리포트가 만들어졌습니다. <br />
-              친구에게 공유해 보세요.
-            </div>
-
-            <div className="flex">
-              <Button color="plain" onClick={handleClickShare}>
-                공유할래요
+            <div className="flex flex-col gap-2">
+              <Button color="plain" onClick={() => console.log("form 이동")}>
+                게시할래요
               </Button>
-              <button
-                type="button"
-                className={`h-14 py-2.5 px-5 ml-2 rounded-xl border border-black`}
-                onClick={handleClickReset}
+              <Button
+                color="transparent"
+                onClick={() => router.push("/community")}
               >
-                <ResetIcon />
-              </button>
+                다른 사람 게시글 구경가기
+              </Button>
+              <div className="flex justify-center items-center gap-6 my-3 relative">
+                <button
+                  className="flex flex-col items-center"
+                  onClick={handleClickShare}
+                >
+                  <KakaoIcon />
+                  <span className="text-sm text-gray02 font-semibold mt-1">
+                    공유하기
+                  </span>
+                </button>
+                <span className="w-[1px] h-7 bg-gray-200 inline-block"></span>
+                <button
+                  className="flex flex-col items-center"
+                  onClick={() =>
+                    handleCopy(
+                      `${process.env.NEXT_PUBLIC_BASE_URL}/result?id=${id}`
+                    )
+                  }
+                >
+                  <LinkIcon />
+                  <span className="text-sm text-gray02 font-semibold mt-1">
+                    링크복사
+                  </span>
+                </button>
+                <span className="w-[1px] h-7 bg-gray-200 inline-block"></span>
+                <button
+                  className="flex flex-col items-center"
+                  onClick={handleDownload}
+                >
+                  <DownloadIcon />
+                  <span className="text-sm text-gray02 font-semibold mt-1">
+                    이미지 저장
+                  </span>
+                </button>
+                {isToast && (
+                  <div
+                    className={`bg-gray02 bg-opacity-80 text-white font-bold text-sm absolute -top-8 px-5 py-3 rounded-half animate-fade-in`}
+                  >
+                    링크가 클립보드에 복사되었어요
+                  </div>
+                )}
+              </div>
             </div>
           </div>
 
