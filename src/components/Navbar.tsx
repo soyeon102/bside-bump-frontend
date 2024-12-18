@@ -30,6 +30,11 @@ const Navbar = () => {
       hasBack: true,
       title: "살까말까 게시판",
     },
+    {
+      navigation: "/form",
+      hasBack: true,
+      title: "",
+    },
   ];
 
   const findRoute = showHeaderRoutes.find(
