@@ -1,17 +1,36 @@
 import { StateCreator } from "zustand";
 import { Condition, SelectedItem } from "@/types/item";
 
+interface RecommendedItemType {
+  name: string;
+  price: number;
+  iconUrl: string;
+  percentage: number;
+  quantity: number;
+  change: number;
+}
+
+interface DataType {
+  id: string;
+  name: string;
+  price: number;
+  recommendationType: Condition;
+  suggestedItems: RecommendedItemType[];
+}
+
 type ItemState = {
   thatItemName: string;
   thatItemPrice: string;
   selectCondition: Condition | null;
   selectItemList: SelectedItem[];
+  resultItem: DataType | null;
 };
 
 type ItemAction = {
   setThatItemName: (name: string) => void;
   setThatItemPrice: (price: string) => void;
   setSelectCondition: (condition: Condition) => void;
+  setResultItem: (item: DataType) => void;
   addSelectItem: (item: SelectedItem) => void;
   deleteItem: (id: number) => void;
   resetItem: () => void;
@@ -25,6 +44,7 @@ export const createUserItemSlice: StateCreator<UserItemSlice> = (set) => ({
   thatItemPrice: "",
   selectCondition: null,
   selectItemList: [],
+  resultItem: null,
   setThatItemName: (itemName) => set(() => ({ thatItemName: itemName })),
   setThatItemPrice: (itemPrice) => set(() => ({ thatItemPrice: itemPrice })),
   setSelectCondition: (condition) =>
@@ -45,4 +65,5 @@ export const createUserItemSlice: StateCreator<UserItemSlice> = (set) => ({
       thatItemPrice: "",
     }),
   resetItemList: () => set({ selectItemList: [] }),
+  setResultItem: (item) => set({ resultItem: item }),
 });

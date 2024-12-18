@@ -54,7 +54,8 @@ const ResultPage = () => {
   const [imageBlob, setImageBlob] = useState<Blob | null>(null);
   const [isToast, setIsToast] = useState<boolean>(false);
 
-  const { thatItemName, thatItemPrice, selectCondition } = useStore();
+  const { thatItemName, thatItemPrice, selectCondition, setResultItem } =
+    useStore();
   const { data, isLoading, isSuccess } = useQuery<DataType>({
     queryKey: ["result", id],
     queryFn: async () => {
@@ -62,6 +63,7 @@ const ResultPage = () => {
 
       const res = await fetch(`${API_URL}/result/${id}`, { cache: "no-store" });
       const data = await res.json();
+      setResultItem(data);
       return data;
     },
     staleTime: 0,
@@ -292,7 +294,7 @@ const ResultPage = () => {
             data-html2canvas-ignore={true}
           >
             <div className="flex flex-col gap-2">
-              <Button color="plain" onClick={() => console.log("form 이동")}>
+              <Button color="plain" onClick={() => router.push("/form")}>
                 게시할래요
               </Button>
               <Button
