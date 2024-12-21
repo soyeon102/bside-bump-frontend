@@ -11,6 +11,8 @@ import ResetIcon from "./ResetIcon";
 import UserIcon from "./UserIcon";
 import KakaoIcon from "./KakaoIcon";
 import LinkIcon from "./LinkIcon";
+import CheckedBlackIcon from "./CheckedBlackIcon";
+import RadioIcon from "./RadioIcon";
 
 export {
   CircleAddIcon,
@@ -26,4 +28,6 @@ export {
   UserIcon,
   KakaoIcon,
   LinkIcon,
+  CheckedBlackIcon,
+  RadioIcon,
 };
