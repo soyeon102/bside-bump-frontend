@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
-import Providers from "@/utils/Providers";
-import KakaoScript from "@/utils/KakaoScript";
+import KakaoScript from "@/components/KakaoScript";
+import Providers from "@/components/Providers";
 
 declare global {
   interface Window {
