@@ -5,44 +5,43 @@ import { useRouter } from "next/navigation";
 
 import Button from "@/components/Button";
 import { useStore } from "@/store/useStore";
-import { formatWithCommas } from "@/utils/formatWithCommas";
+import { formatDate, formatWithCommas } from "@/utils";
 import { CheckedBlackIcon, RadioIcon } from "@/components/icons";
+
+const today = new Date();
+
+const radioButtons = [
+  {
+    label: "1일",
+    value: 1,
+    date: formatDate(
+      new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1)
+    ),
+  },
+  {
+    label: "2일",
+    value: 2,
+    date: formatDate(
+      new Date(today.getFullYear(), today.getMonth(), today.getDate() + 2)
+    ),
+  },
+  {
+    label: "일주일",
+    value: 7,
+    date: formatDate(
+      new Date(today.getFullYear(), today.getMonth(), today.getDate() + 7)
+    ),
+  },
+];
 
 const FormPage = () => {
   const router = useRouter();
   const { resultItem } = useStore();
 
-  const today = new Date();
-  const radioButtons = [
-    {
-      label: "1일",
-      value: 1,
-      date: new Date(today.setDate(today.getDate() + 1))
-        .toLocaleDateString()
-        .slice(2),
-    },
-    {
-      label: "2일",
-      value: 2,
-      date: new Date(today.setDate(today.getDate() + 2))
-        .toLocaleDateString()
-        .slice(2),
-    },
-    {
-      label: "일주일",
-      value: 7,
-      date: new Date(today.setDate(today.getDate() + 7))
-        .toLocaleDateString()
-        .slice(2),
-    },
-  ];
-
   const [textValue, setTextValue] = useState("");
   const [isVote, setIsVote] = useState(false);
   const [selectPeriod, setSelectPeriod] = useState(1);
   const [selectType, setSelectType] = useState(0);
-
-  console.log(resultItem);
 
   if (!resultItem) {
     alert("다시 해주세요");
@@ -74,8 +73,7 @@ const FormPage = () => {
           <form action="">
             <textarea
               className="w-full bg-gray04 rounded-xl p-4 h-[240px] resize-none focus:outline-none text-gray01 text-sm"
-              placeholder="닌텐도 스위치 하나에 이정도나 살 수 있다고....? 먹는게 낫나 스위치
-          사는게 낫나.........후 다들 어떻게 생각해...?"
+              placeholder={`닌텐도 스위치 하나에 이정도나 살 수 있다고....? 먹는게 낫나 스위치 사는게 낫나.........후\n다들 어떻게 생각해...?`}
               maxLength={1000}
               value={textValue}
               onChange={(e) => setTextValue(e.target.value)}
@@ -92,8 +90,8 @@ const FormPage = () => {
             )}
             <p className="text-sm">살까말까 투표 기능 사용</p>
           </button>
-          <div className="absolute bottom-1 right-2">
-            {textValue.length}/1,000
+          <div className="absolute bottom-1 right-2 text-sm">
+            {textValue.length.toLocaleString()}/1,000
           </div>
         </div>
         {isVote && (
@@ -180,7 +178,9 @@ const FormPage = () => {
         )}
       </div>
       <div className="mb-7">
-        <Button color="plain">게시하기</Button>
+        <Button color="plain" onClick={() => alert("서비스 준비중입니다.")}>
+          게시하기
+        </Button>
       </div>
     </div>
   );

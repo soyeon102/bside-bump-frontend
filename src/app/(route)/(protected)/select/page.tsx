@@ -10,7 +10,7 @@ import { useStore } from "@/store/useStore";
 import { CircleAddIcon, AddItemIcon } from "@/components/icons";
 
 import BottomSheet from "@/components/BottomSheet";
-import { formatWithCommas } from "@/utils/formatWithCommas";
+import { formatWithCommas } from "@/utils";
 import usePriceChange from "@/hooks/usePriceChange";
 
 import { useMutation, useQuery } from "@tanstack/react-query";

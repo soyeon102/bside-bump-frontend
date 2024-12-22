@@ -1,5 +1,6 @@
-import { formatWithCommas } from "@/utils/formatWithCommas";
 import Image from "next/image";
+
+import { formatWithCommas } from "@/utils";
 import { CheckedIcon } from "../icons";
 import { API_URL } from "@/constants/url.const";
 

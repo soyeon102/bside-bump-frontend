@@ -17,7 +17,7 @@ import { useRef } from "react";
 import { useStore } from "@/store/useStore";
 import { useQuery } from "@tanstack/react-query";
 import { useRouter, useSearchParams } from "next/navigation";
-import { formatWithCommas } from "@/utils/formatWithCommas";
+import { formatWithCommas } from "@/utils";
 import ResultPageLoading from "./loading";
 
 import { API_URL } from "@/constants/url.const";
