@@ -20,7 +20,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { formatWithCommas } from "@/utils";
 import ResultPageLoading from "./loading";
 
-import { API_URL } from "@/constants/url.const";
+import { API_URL, BASE_URL } from "@/constants/url.const";
 
 type Condition = "MORE" | "EXPENSIVE";
 
@@ -146,16 +146,16 @@ const ResultPage = () => {
             imageWidth: 400,
             imageHeight: 400,
             link: {
-              mobileWebUrl: `${process.env.NEXT_PUBLIC_BASE_URL}/result?id=${data?.id}`,
-              webUrl: `${process.env.NEXT_PUBLIC_BASE_URL}/result?id=${data?.id}`,
+              mobileWebUrl: `${BASE_URL}/result?id=${data?.id}`,
+              webUrl: `${BASE_URL}/result?id=${data?.id}`,
             },
           },
           buttons: [
             {
               title: "자세히 보기",
               link: {
-                mobileWebUrl: `${process.env.NEXT_PUBLIC_BASE_URL}/result?id=${data?.id}`,
-                webUrl: `${process.env.NEXT_PUBLIC_BASE_URL}/result?id=${data?.id}`,
+                mobileWebUrl: `${BASE_URL}/result?id=${data?.id}`,
+                webUrl: `${BASE_URL}/result?id=${data?.id}`,
               },
             },
           ],
@@ -316,11 +316,7 @@ const ResultPage = () => {
                 <span className="w-[1px] h-7 bg-gray-200 inline-block"></span>
                 <button
                   className="flex flex-col items-center"
-                  onClick={() =>
-                    handleCopy(
-                      `${process.env.NEXT_PUBLIC_BASE_URL}/result?id=${id}`
-                    )
-                  }
+                  onClick={() => handleCopy(`${BASE_URL}/result?id=${id}`)}
                 >
                   <LinkIcon />
                   <span className="text-sm text-gray02 font-semibold mt-1">
