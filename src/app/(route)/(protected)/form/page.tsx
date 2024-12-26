@@ -54,7 +54,7 @@ const FormPage = () => {
       <div className="flex flex-col gap-7">
         <div>
           <h6 className="text-title-lg mt-7">
-            {resultItem.name} {formatWithCommas(resultItem.price.toString())}원
+            {resultItem.name} {formatWithCommas(resultItem.price)}원
           </h6>
           <h6 className="text-title-sm mt-1">
             {resultItem?.recommendationType === "MORE"
@@ -72,7 +72,7 @@ const FormPage = () => {
         <div className="relative">
           <form action="">
             <textarea
-              className="w-full bg-gray04 rounded-xl p-4 h-[240px] resize-none focus:outline-none text-gray01"
+              className="w-full h-textbox bg-gray04 rounded-xl p-4 h-textBox resize-none focus:outline-none text-gray01"
               placeholder={`닌텐도 스위치 하나에 이정도나 살 수 있다고....? 먹는게 낫나 스위치 사는게 낫나.........후\n다들 어떻게 생각해...?`}
               maxLength={1000}
               value={textValue}

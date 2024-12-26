@@ -6,3 +6,9 @@ export type SelectedItem = {
   price: number;
   iconUrl?: string;
 };
+
+export interface CategoryDataType {
+  id: number;
+  name: string;
+  products: SelectedItem[];
+}

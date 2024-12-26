@@ -14,7 +14,7 @@ const Item = ({
 }: {
   id: number;
   name: string;
-  price: string;
+  price: number;
   iconUrl: string | undefined;
   selected: boolean;
   onClickItem: () => void;

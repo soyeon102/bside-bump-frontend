@@ -5,6 +5,87 @@ import { ChevronUpIcon, ChevronDownIcon } from "@/components/icons";
 import { useState } from "react";
 import ListItem from "./_components/ListItem";
 
+type Condition = "MORE" | "EXPENSIVE";
+
+interface RecommendedItemType {
+  name: string;
+  price: number;
+  iconUrl: string;
+  percentage: number;
+  quantity: number;
+  change: number;
+}
+
+interface DataType {
+  id: string;
+  name: string;
+  price: number;
+  recommendationType: Condition;
+  suggestedItems: RecommendedItemType[];
+}
+
+interface CommunityDataType extends DataType {
+  user: string;
+  date: Date;
+  voteData: {
+    buy: number;
+    hold: number;
+    voteCount: number;
+  };
+  comments: number;
+}
+
+const mockData: CommunityDataType[] = [
+  {
+    id: "0",
+    user: "김철수",
+    date: new Date("2024-12-25"),
+    recommendationType: "MORE",
+    name: "오마카세",
+    price: 80000,
+    suggestedItems: [
+      {
+        name: "삼성전자",
+        price: 80000,
+        iconUrl: "https://dummyimage.com/600x400/000/fff",
+        percentage: 0.5,
+        quantity: 1,
+        change: 0.5,
+      },
+    ],
+    voteData: {
+      buy: 123,
+      hold: 12,
+      voteCount: 143,
+    },
+    comments: 12,
+  },
+  {
+    id: "1",
+    user: "김철수",
+    date: new Date("2024-12-25"),
+    recommendationType: "MORE",
+    name: "오마카세",
+    price: 80000,
+    suggestedItems: [
+      {
+        name: "삼성전자",
+        price: 80000,
+        iconUrl: "https://dummyimage.com/600x400/000/fff",
+        percentage: 0.5,
+        quantity: 1,
+        change: 0.5,
+      },
+    ],
+    voteData: {
+      buy: 123,
+      hold: 12,
+      voteCount: 143,
+    },
+    comments: 12,
+  },
+];
+
 const filterList = [
   {
     id: 0,
@@ -73,10 +154,13 @@ const CommunityPage = () => {
         </div>
       </div>
       <ul className="bg-gray04 flex flex-col gap-y-3 pb-3">
+        {mockData.map((data) => (
+          <ListItem key={data.id} item={data} />
+        ))}
+
+        {/* <ListItem />
         <ListItem />
-        <ListItem />
-        <ListItem />
-        <ListItem />
+        <ListItem /> */}
       </ul>
     </div>
   );

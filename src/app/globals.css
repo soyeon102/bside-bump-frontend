@@ -7,6 +7,7 @@
   --foreground: #171717;
   --min-layout-size: 475px;
   --border: #535353;
+  --textbox-height: 240px;
 }
 
 @media (prefers-color-scheme: dark) {

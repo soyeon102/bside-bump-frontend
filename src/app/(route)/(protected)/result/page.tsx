@@ -209,9 +209,7 @@ const ResultPage = () => {
                     <p className="text-title-lg mb-1 text-center">
                       {thatItemName || data.name}{" "}
                       <span className="text-primary04">
-                        {formatWithCommas(
-                          thatItemPrice || data.price.toString()
-                        )}
+                        {formatWithCommas(thatItemPrice || data.price)}
                       </span>
                       원,
                     </p>
@@ -241,7 +239,7 @@ const ResultPage = () => {
                               남은 돈:{" "}
                               {item.change === 0
                                 ? item.change
-                                : formatWithCommas(item.change.toString())}
+                                : formatWithCommas(item.change)}
                               원
                             </span>
                           </div>

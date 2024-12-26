@@ -20,7 +20,7 @@ interface DataType {
 
 type ItemState = {
   thatItemName: string;
-  thatItemPrice: string;
+  thatItemPrice: number;
   selectCondition: Condition | null;
   selectItemList: SelectedItem[];
   resultItem: DataType | null;
@@ -28,7 +28,7 @@ type ItemState = {
 
 type ItemAction = {
   setThatItemName: (name: string) => void;
-  setThatItemPrice: (price: string) => void;
+  setThatItemPrice: (price: number) => void;
   setSelectCondition: (condition: Condition) => void;
   setResultItem: (item: DataType) => void;
   addSelectItem: (item: SelectedItem) => void;
@@ -41,7 +41,7 @@ export type UserItemSlice = ItemState & ItemAction;
 
 export const createUserItemSlice: StateCreator<UserItemSlice> = (set) => ({
   thatItemName: "",
-  thatItemPrice: "",
+  thatItemPrice: 0,
   selectCondition: null,
   selectItemList: [],
   resultItem: null,
@@ -62,7 +62,7 @@ export const createUserItemSlice: StateCreator<UserItemSlice> = (set) => ({
   resetItem: () =>
     set({
       thatItemName: "",
-      thatItemPrice: "",
+      thatItemPrice: 0,
     }),
   resetItemList: () => set({ selectItemList: [] }),
   setResultItem: (item) => set({ resultItem: item }),

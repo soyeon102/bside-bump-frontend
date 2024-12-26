@@ -19,20 +19,9 @@ import { useRouter } from "next/navigation";
 import { API_URL } from "@/constants/url.const";
 import SearchIcon from "@/components/icons/SearchIcon";
 
+import { SelectedItem, CategoryDataType } from "@/types/item";
+
 type Condition = "MORE" | "EXPENSIVE";
-
-interface SelectedItem {
-  id: number;
-  name: string;
-  price: string;
-  iconUrl?: string;
-}
-
-interface DataType {
-  id: number;
-  name: string;
-  products: SelectedItem[];
-}
 
 interface RecommendedItemType {
   name: string;
@@ -58,7 +47,7 @@ const SelectPage = () => {
     resetItemList,
   } = useStore();
 
-  const { data, isLoading, isSuccess } = useQuery<DataType[]>({
+  const { data, isLoading, isSuccess } = useQuery<CategoryDataType[]>({
     queryKey: ["category"],
     queryFn: async () => {
       const res = await fetch(
@@ -273,7 +262,7 @@ const SelectPage = () => {
                       id={item.id}
                       key={idx}
                       name={item.name}
-                      price={item.price}
+                      price={Number(item.price)}
                       iconUrl={item.iconUrl}
                       onClickItem={() => handleClickItem(item)}
                       selected={selectItemList.some(
@@ -290,9 +279,7 @@ const SelectPage = () => {
           <Chip
             key={item.id}
             hasDelete={true}
-            label={`${item.name} ${formatWithCommas(
-              item.price.toLocaleString()
-            )}원`}
+            label={`${item.name} ${formatWithCommas(item.price)}원`}
             value={item.id}
             onClickDelete={() => handleDeleteItem(item.id)}
           />
@@ -336,7 +323,9 @@ const SelectPage = () => {
                 placeholder="1,000"
                 className="font-bold text-lg py-3 pr-1 mr-2 flex-1 placeholder:text-lg w-fill-available"
                 type="text"
-                value={addItemPrice ? formatWithCommas(addItemPrice) : ""}
+                value={
+                  addItemPrice ? formatWithCommas(Number(addItemPrice)) : ""
+                }
                 onChange={handlePriceChange}
                 pattern="\d*"
                 maxLength={12}
@@ -359,7 +348,7 @@ const SelectPage = () => {
           color="plain"
           disable={
             addItemName === "" ||
-            addItemPrice === "" ||
+            addItemPrice === "0" ||
             Number(addItemPrice) < 1
           }
           onClick={handleClickAddItem}

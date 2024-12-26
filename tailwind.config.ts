@@ -30,8 +30,14 @@ const config: Config = {
         layout: "var(--min-layout-size)",
         "layout-calc": "calc(var(--min-layout-size) - 2rem)",
       },
+      height: {
+        textbox: "var(--textbox-height)",
+      },
       minHeight: {
         inherit: "inherit",
+      },
+      maxHeight: {
+        textbox: "var(--textbox-height)",
       },
       fontSize: {
         "title-lg": [
