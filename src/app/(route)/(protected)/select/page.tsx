@@ -1,39 +1,35 @@
 "use client";
 
 import { ChangeEvent, useEffect, useState } from "react";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
 import { customAlphabet } from "nanoid";
+
 import Button from "@/components/Button";
 import Chip from "@/components/Chip";
-import Item from "@/components/select/Item";
 import Alert from "@/components/Alert";
-import { useStore } from "@/store/useStore";
-import { CircleAddIcon, AddItemIcon } from "@/components/icons";
-
 import BottomSheet from "@/components/BottomSheet";
+import { TextField } from "@/components/TextField";
+import { CircleAddIcon, AddItemIcon, SearchIcon } from "@/components/icons";
+import Item from "./_components/Item";
+
+import { useStore } from "@/store/useStore";
+import { API_URL } from "@/constants/url.const";
 import { formatWithCommas } from "@/utils";
 import usePriceChange from "@/hooks/usePriceChange";
-
-import { useMutation, useQuery } from "@tanstack/react-query";
+import {
+  SelectedItem,
+  CategoryData,
+  RecommendedItem,
+  Condition,
+} from "@/types/item";
 import Loading from "@/app/loading";
-import { useRouter } from "next/navigation";
-import { API_URL } from "@/constants/url.const";
-import SearchIcon from "@/components/icons/SearchIcon";
-
-import { SelectedItem, CategoryDataType } from "@/types/item";
-
-type Condition = "MORE" | "EXPENSIVE";
-
-interface RecommendedItemType {
-  name: string;
-  price: number;
-  iconUrl?: string | undefined;
-}
 
 type PostItemType = {
   name: string;
   price: number;
   type: Condition;
-  recommendedItems?: RecommendedItemType[];
+  recommendedItems?: RecommendedItem[];
 };
 
 const SelectPage = () => {
@@ -47,13 +43,11 @@ const SelectPage = () => {
     resetItemList,
   } = useStore();
 
-  const { data, isLoading, isSuccess } = useQuery<CategoryDataType[]>({
+  const { data, isLoading, isSuccess } = useQuery<CategoryData[]>({
     queryKey: ["category"],
     queryFn: async () => {
       const res = await fetch(
-        `${API_URL}/category?type=${selectCondition}&price=${Number(
-          thatItemPrice
-        )}`
+        `${API_URL}/category?type=${selectCondition}&price=${thatItemPrice}`
       );
       const data = res.json();
       return data;
@@ -67,9 +61,11 @@ const SelectPage = () => {
   const [isAlertOpen, setIsAlertOpen] = useState<boolean>(false);
   const [alertMessage, setAlertMessage] = useState<string>("");
   const [addItemName, setAddItemName] = useState<string>("");
-  const [addItemPrice, setAddItemPrice] = useState<string>("");
+  const [addItemPrice, setAddItemPrice] = useState<number | null>(null);
+  const [isSearchImageModalOpen, setIsSearchImageModalOpen] =
+    useState<boolean>(false);
 
-  const { handlePriceChange } = usePriceChange(addItemPrice, setAddItemPrice);
+  const { handlePriceChange } = usePriceChange(setAddItemPrice);
 
   const nanoid = customAlphabet("0123456789", 10);
 
@@ -102,7 +98,7 @@ const SelectPage = () => {
 
   const closeBottomSheet = () => {
     setAddItemName("");
-    setAddItemPrice("");
+    setAddItemPrice(null);
     setIsBottomSheetOpen(false);
   };
 
@@ -262,7 +258,7 @@ const SelectPage = () => {
                       id={item.id}
                       key={idx}
                       name={item.name}
-                      price={Number(item.price)}
+                      price={item.price}
                       iconUrl={item.iconUrl}
                       onClickItem={() => handleClickItem(item)}
                       selected={selectItemList.some(
@@ -300,45 +296,38 @@ const SelectPage = () => {
       <BottomSheet isOpen={isBottomSheetOpen} onClose={closeBottomSheet}>
         <div className="flex flex-col gap-7">
           <div>
-            <p className="mb-3">
-              직접 추가할 품목 <span className="text-warning">*</span>
-            </p>
-            <input
-              type="text"
+            <TextField
               placeholder="우육면"
               value={addItemName}
-              className="font-bold text-lg py-3 w-full placeholder:text-lg"
               onChange={(e: ChangeEvent<HTMLInputElement>) =>
                 setAddItemName(e.target.value)
               }
               maxLength={20}
+              labelText=" 직접 추가할 품목"
+              required
             />
           </div>
           <div>
-            <p className="mb-3">
-              가격 <span className="text-warning">*</span>
-            </p>
-            <div className="flex items-center w-full">
-              <input
-                placeholder="1,000"
-                className="font-bold text-lg py-3 pr-1 mr-2 flex-1 placeholder:text-lg w-fill-available"
-                type="text"
-                value={
-                  addItemPrice ? formatWithCommas(Number(addItemPrice)) : ""
-                }
-                onChange={handlePriceChange}
-                pattern="\d*"
-                maxLength={12}
-              />
-              <span className="font-bold text-lg">원</span>
-            </div>
+            <TextField
+              placeholder="1,000"
+              value={addItemPrice ? formatWithCommas(addItemPrice) : ""}
+              onChange={handlePriceChange}
+              maxLength={12}
+              pattern="\d*"
+              labelText="가격"
+              unitText="원"
+              required
+            />
           </div>
           <div className="mb-6">
             <div className="mb-3 flex items-center justify-between flex-wrap">
               <p>이미지 직접 추가</p>
               <p className="text-sm">*선택한 이미지는 결과지에 표시돼요</p>
             </div>
-            <div className="h-12 border-gray03 border rounded-md p-3 flex items-center cursor-pointer">
+            <div
+              className="h-12 border-gray03 border rounded-md p-3 flex items-center cursor-pointer"
+              onClick={() => setIsSearchImageModalOpen(true)}
+            >
               <p className="mr-2">이미지 검색</p>
               <SearchIcon />
             </div>
@@ -348,7 +337,7 @@ const SelectPage = () => {
           color="plain"
           disable={
             addItemName === "" ||
-            addItemPrice === "0" ||
+            addItemPrice === null ||
             Number(addItemPrice) < 1
           }
           onClick={handleClickAddItem}
@@ -366,6 +355,15 @@ const SelectPage = () => {
         onClickButton={() => setIsAlertOpen(false)}
       />
       {/* 알럿 */}
+
+      {/* 이미지 검색 모달 */}
+      <BottomSheet
+        isOpen={isSearchImageModalOpen}
+        onClose={() => setIsSearchImageModalOpen(false)}
+      >
+        <div>Image List</div>
+      </BottomSheet>
+      {/* 이미지 검색 모달 */}
     </>
   );
 };

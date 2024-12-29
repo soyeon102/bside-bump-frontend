@@ -11,7 +11,7 @@ const AskItemButton = () => {
       color="plain"
       disable={
         thatItemName === "" ||
-        thatItemPrice === "" ||
+        thatItemPrice === 0 ||
         Number(thatItemPrice) < 1000
       }
     >

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useEffect, useState } from "react";
@@ -133,7 +132,9 @@ const ResultPage = () => {
             title:
               "지금, 구매를 망설이고 있나요?\n과소비 방지 서비스 <그돈이면>💸",
             description: `
-            ${thatItemName} ${formatWithCommas(thatItemPrice)}원, 그돈이면 ${
+            ${thatItemName} ${formatWithCommas(
+              thatItemPrice || 0
+            )}원, 그돈이면 ${
               data?.recommendationType === "MORE" ? "차라리" : "아껴서"
             } \n${
               data?.recommendationType === "MORE"

@@ -13,6 +13,7 @@ import KakaoIcon from "./KakaoIcon";
 import LinkIcon from "./LinkIcon";
 import CheckedBlackIcon from "./CheckedBlackIcon";
 import RadioIcon from "./RadioIcon";
+import SearchIcon from "./SearchIcon";
 
 export {
   CircleAddIcon,
@@ -30,4 +31,5 @@ export {
   LinkIcon,
   CheckedBlackIcon,
   RadioIcon,
+  SearchIcon,
 };

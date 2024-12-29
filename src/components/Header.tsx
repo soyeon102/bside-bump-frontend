@@ -1,14 +1,12 @@
 import { ChevronLeftIcon } from "./icons";
 
-const Header = ({
-  title,
-  hasBack = false,
-  onClickBack,
-}: {
-  title?: string;
+type HeaderProps = {
+  title: string;
   hasBack: boolean;
   onClickBack: () => void;
-}) => {
+};
+
+const Header = ({ title, hasBack = false, onClickBack }: HeaderProps) => {
   return (
     <nav className="flex justify-between items-center h-12 px-2 relative z-0">
       <div className="flex flex-1 items-center justify-start">

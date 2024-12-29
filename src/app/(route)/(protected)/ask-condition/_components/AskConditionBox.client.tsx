@@ -5,19 +5,21 @@ import Image from "next/image";
 import { ChevronRightIcon } from "@/components/icons";
 import { useStore } from "@/store/useStore";
 
-type Condition = "MORE" | "EXPENSIVE";
+import { Condition } from "@/types/item";
+
+interface AskConditionBoxProps {
+  topic: string;
+  text: string;
+  imgSrc: string;
+  conditionType: Condition;
+}
 
 const AskConditionBox = ({
   topic,
   text,
   imgSrc,
   conditionType,
-}: {
-  topic: string;
-  text: string;
-  imgSrc: string;
-  conditionType: Condition;
-}) => {
+}: AskConditionBoxProps) => {
   const textRef = useRef<HTMLParagraphElement>(null);
   const { setSelectCondition } = useStore();
 
