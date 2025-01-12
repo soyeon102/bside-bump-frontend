@@ -1,11 +1,18 @@
 import { ChangeEvent } from "react";
 
-const usePriceChange = (price: string, setPrice: (value: string) => void) => {
+const usePriceChange = (setPrice: (value: number) => void) => {
   const handlePriceChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const rawValue = e.currentTarget.value.replace(/[, ]/g, "");
+    const rawValue = e.currentTarget.value.toString().replace(/[, ]/g, "");
 
-    if (!isNaN(Number(rawValue))) {
-      setPrice(rawValue);
+    if (rawValue === "") {
+      setPrice(0);
+      return;
+    }
+
+    const numericValue = parseFloat(rawValue);
+
+    if (!isNaN(numericValue)) {
+      setPrice(numericValue);
     }
   };
 

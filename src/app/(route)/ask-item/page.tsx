@@ -6,7 +6,7 @@ import AskItemButton from "./_components/AskItemButton.client";
 const AskItemPage = () => {
   return (
     <>
-      <div className="px-6 flex-1">
+      <div className="px-6 flex-1 mt-7">
         <div className="mb-11">
           <p className="text-title-lg mb-1">
             소비를 망설이고 있나요?

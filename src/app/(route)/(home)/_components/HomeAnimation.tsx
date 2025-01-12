@@ -1,18 +1,13 @@
 "use client";
 
-import { CldImage } from "next-cloudinary";
+import Lottie from "lottie-react";
+import homeAnimation from "@public/animation/home.json";
 
 const HomeAnimation = () => {
   return (
-    <CldImage
-      width={300}
-      height={60}
-      format="gif"
-      quality="auto"
-      src="animation-wallet_fnoph2"
-      alt="home animation"
-      style={{ width: "auto" }}
-    />
+    <div className="w-[calc(100%+3rem)] absolute top-0 -z-10 -left-6">
+      <Lottie animationData={homeAnimation} />
+    </div>
   );
 };
 

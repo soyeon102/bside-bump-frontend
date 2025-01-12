@@ -14,11 +14,12 @@ const Button = ({
   const colorVariants = {
     plain: "bg-black text-primary02",
     home: "bg-primary03 text-black",
+    transparent: "bg-white border border-gray01",
   };
   return (
     <button
       type="button"
-      className={`h-14 w-full py-2.5 px-5 text-lg font-bold focus:outline-none rounded-xl ${
+      className={`transition-colors relative h-14 w-full py-2.5 px-5 text-lg font-bold focus:outline-none rounded-xl ${
         disable && "bg-gray03 text-white"
       } ${color ? colorVariants[color] : ""}`}
       onClick={onClick}

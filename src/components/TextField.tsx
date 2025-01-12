@@ -1,17 +1,25 @@
 import * as React from "react";
 
-export interface InputProps
-  extends React.InputHTMLAttributes<HTMLInputElement> {
+interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   labelText?: string;
   unitText?: string;
   helperText?: string;
+  required?: boolean;
 }
 
 const TextField = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ labelText, unitText, helperText, className, type, ...props }, ref) => {
+  (
+    { labelText, unitText, helperText, required, className, type, ...props },
+    ref
+  ) => {
     return (
       <>
-        {labelText && <p className="mb-3">{labelText}</p>}
+        {labelText && (
+          <p className="mb-3">
+            {labelText}
+            {required && <span className="text-warning">*</span>}
+          </p>
+        )}
         <div className="flex items-center w-full">
           <input
             type={type}

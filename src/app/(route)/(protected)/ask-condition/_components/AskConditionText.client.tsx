@@ -8,7 +8,7 @@ const AskConditionText = () => {
 
   return (
     <>
-      <p className="text-title-lg mb-1">
+      <p className="text-title-lg mb-1 mt-7">
         {thatItemName} {Number(thatItemPrice).toLocaleString()}원이요?
         <Image
           src="/imgs/emoji-surprise.png"

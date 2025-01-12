@@ -13,14 +13,27 @@ const Navbar = () => {
     {
       navigation: "/ask-item",
       hasBack: true,
+      title: "",
     },
     {
       navigation: "/ask-condition",
       hasBack: true,
+      title: "",
     },
     {
       navigation: "/select",
       hasBack: true,
+      title: "",
+    },
+    {
+      navigation: "/community",
+      hasBack: true,
+      title: "살까말까 게시판",
+    },
+    {
+      navigation: "/form",
+      hasBack: true,
+      title: "",
     },
   ];
 
@@ -40,6 +53,7 @@ const Navbar = () => {
   return findRoute ? (
     <Header
       hasBack={findRoute.hasBack}
+      title={findRoute.title}
       onClickBack={
         pathname === "/ask-item" ? handleClickToHome : handleClickBack
       }

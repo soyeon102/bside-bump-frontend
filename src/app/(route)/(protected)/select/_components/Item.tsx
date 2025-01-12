@@ -1,7 +1,17 @@
-import { formatWithCommas } from "@/utils/formatWithCommas";
 import Image from "next/image";
-import { CheckedIcon } from "../icons";
+
+import { formatWithCommas } from "@/utils";
+import { CheckedIcon } from "@/components/icons";
 import { API_URL } from "@/constants/url.const";
+
+interface ItemProps {
+  id: number;
+  name: string;
+  price: number;
+  iconUrl: string | undefined;
+  selected: boolean;
+  onClickItem: () => void;
+}
 
 const Item = ({
   id,
@@ -10,14 +20,7 @@ const Item = ({
   iconUrl,
   selected,
   onClickItem,
-}: {
-  id: number;
-  name: string;
-  price: string;
-  iconUrl: string | undefined;
-  selected: boolean;
-  onClickItem: () => void;
-}) => {
+}: ItemProps) => {
   return (
     <li
       className={`flex flex-col items-center cursor-pointer`}

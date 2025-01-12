@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+
 import Navbar from "@/components/Navbar";
-import Providers from "@/utils/Providers";
-import KakaoScript from "@/utils/KakaoScript";
+import KakaoScript from "@/components/KakaoScript";
+import Providers from "@/components/Providers";
+import { BASE_URL } from "@/constants/url.const";
 
 declare global {
   interface Window {
@@ -25,7 +27,7 @@ export const metadata: Metadata = {
     title: "그돈이면",
     description: "과소비 방지 서비스, 그돈이면",
     images: ["/imgs/metadata.png"],
-    url: "https://with-that-money.vercel.app",
+    url: BASE_URL,
   },
   twitter: {
     card: "summary_large_image",

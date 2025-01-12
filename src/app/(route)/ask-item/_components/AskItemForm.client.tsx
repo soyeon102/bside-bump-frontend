@@ -1,16 +1,16 @@
 "use client";
 
-import React, { ChangeEvent } from "react";
+import { ChangeEvent } from "react";
 import usePriceChange from "@/hooks/usePriceChange";
 import { useStore } from "@/store/useStore";
-import { formatWithCommas } from "@/utils/formatWithCommas";
+import { formatWithCommas } from "@/utils";
 import { TextField } from "@/components/TextField";
 
 const AskItemForm = () => {
   const { thatItemName, thatItemPrice, setThatItemName, setThatItemPrice } =
     useStore();
 
-  const { handlePriceChange } = usePriceChange(thatItemPrice, setThatItemPrice);
+  const { handlePriceChange } = usePriceChange(setThatItemPrice);
 
   return (
     <>
