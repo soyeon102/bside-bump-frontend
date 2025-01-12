@@ -20,6 +20,7 @@ import { formatWithCommas } from "@/utils";
 import ResultPageLoading from "./loading";
 
 import { API_URL, BASE_URL } from "@/constants/url.const";
+import type { KakaoImageUploadResponse } from "@/types/kakao";
 
 type Condition = "MORE" | "EXPENSIVE";
 
@@ -125,7 +126,7 @@ const ResultPage = () => {
     Kakao.Share.uploadImage({
       file: dataTransfer.files,
     })
-      .then((res: any) => {
+      .then((res: KakaoImageUploadResponse) => {
         Kakao.Share.sendDefault({
           objectType: "feed",
           content: {
@@ -162,7 +163,7 @@ const ResultPage = () => {
           ],
         });
       })
-      .catch((err: any) => {
+      .catch((err: Error) => {
         alert("ERROR");
         alert(err);
       });
