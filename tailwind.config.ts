@@ -20,6 +20,7 @@ const config: Config = {
         gray02: "#4A4A4C",
         gray03: "#CED1D6",
         gray04: "#F5F5F6",
+        gray05: "#ACACB6",
         warning: "#FF3333",
       },
       width: {
