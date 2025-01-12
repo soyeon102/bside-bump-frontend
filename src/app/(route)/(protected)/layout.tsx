@@ -25,7 +25,7 @@ const ProtectedLayout = ({
       return;
     }
 
-    if (thatItemName === "" || thatItemPrice === "") {
+    if (thatItemName === "" || thatItemPrice === null) {
       setIsAlertOpen(true);
     }
     setIsLoading(false);
