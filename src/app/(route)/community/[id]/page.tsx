@@ -99,7 +99,7 @@ const CommunityDetailPage = ({
               </li>
             </ul>
             <button
-              className="mt-3 w-full rounded-lg p-3 font-bold bg-primary03 text-white disabled:bg-gray03 hover:opacity-90"
+              className="mt-3 w-full rounded-lg p-3 font-bold bg-primary03 text-black disabled:bg-gray03 disabled:text-white hover:opacity-90"
               disabled={voteType === null}
             >
               투표하기
