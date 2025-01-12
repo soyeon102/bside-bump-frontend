@@ -9,9 +9,11 @@ import DownloadIcon from "./DownloadIcon";
 import AddItemIcon from "./AddItemIcon";
 import ResetIcon from "./ResetIcon";
 import UserIcon from "./UserIcon";
+import UserIconNoBg from "./UserIconNoBg";
 import KakaoIcon from "./KakaoIcon";
 import LinkIcon from "./LinkIcon";
 import CheckedBlackIcon from "./CheckedBlackIcon";
+import CheckedGreenIcon from "./CheckedGreenIcon";
 import RadioIcon from "./RadioIcon";
 import SearchIcon from "./SearchIcon";
 
@@ -27,9 +29,11 @@ export {
   AddItemIcon,
   ResetIcon,
   UserIcon,
+  UserIconNoBg,
   KakaoIcon,
   LinkIcon,
   CheckedBlackIcon,
+  CheckedGreenIcon,
   RadioIcon,
   SearchIcon,
 };
