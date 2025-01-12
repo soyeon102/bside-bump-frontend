@@ -1,4 +1,4 @@
-import { UserIcon } from "@/components/icons";
+import { UserIcon, UserIconNoBg } from "@/components/icons";
 import Link from "next/link";
 
 type Condition = "MORE" | "EXPENSIVE";
@@ -33,8 +33,11 @@ interface PostDataType extends DataType {
 
 const ListItem = ({ item }: { item: PostDataType }) => {
   return (
-    <Link href={`/community/${item.id}`}>
-      <li className="flex flex-col gap-6 p-6 bg-white cursor-pointer">
+    <li>
+      <Link
+        href={`/community/${item.id}`}
+        className="bg-white flex flex-col gap-6 p-6"
+      >
         <div className="flex items-center gap-2">
           <UserIcon />
           <p className="font-bold text-gray01">{item.user}</p>
@@ -61,7 +64,12 @@ const ListItem = ({ item }: { item: PostDataType }) => {
         <div className="p-4 rounded-2xl border-gray03 border">
           <div className="flex items-center justify-between mb-3">
             <p className="text-sm text-primary04 font-bold">투표결과: 참는다</p>
-            <p className="text-sm font-bold">9,123명 참여</p>
+            <p className="flex items-center gap-1">
+              <UserIconNoBg />
+              <span className="text-gray05 text-sm font-bold">
+                9,123명 참여
+              </span>
+            </p>
           </div>
           <div className="w-full overflow-hidden text-sm rounded-lg bg-primary01 bg-opacity-10 relative after:contetn-[''] after:absolute after:top-0 after:left-0 after:w-2/3 after:h-full after:rounded-lg after:bg-primary03 p-3 text-gray01 flex items-center justify-between">
             <p className="text-gray01 relative z-10">참는다</p>
@@ -79,8 +87,8 @@ const ListItem = ({ item }: { item: PostDataType }) => {
         <div className="text-sm">
           댓글 <span className="font-bold">9</span>
         </div>
-      </li>
-    </Link>
+      </Link>
+    </li>
   );
 };
 
