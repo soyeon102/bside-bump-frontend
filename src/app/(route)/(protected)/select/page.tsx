@@ -64,7 +64,8 @@ const SelectPage = () => {
   const [addItemPrice, setAddItemPrice] = useState<number | null>(null);
   const [isSearchImageModalOpen, setIsSearchImageModalOpen] =
     useState<boolean>(false);
-
+  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [searchResult, setSearchResult] = useState<string[]>([]);
   const { handlePriceChange } = usePriceChange(setAddItemPrice);
 
   const nanoid = customAlphabet("0123456789", 10);
@@ -361,7 +362,47 @@ const SelectPage = () => {
         isOpen={isSearchImageModalOpen}
         onClose={() => setIsSearchImageModalOpen(false)}
       >
-        <div>Image List</div>
+        <div className="mb-6">
+          <div className="mb-3 flex items-center justify-between flex-wrap">
+            <p>이미지 직접 추가</p>
+            <p className="text-sm">*선택한 이미지는 결과지에 표시돼요</p>
+          </div>
+          <div className="relative mb-6">
+            <input
+              type="text"
+              placeholder="이미지 검색"
+              className="w-full h-12 border-gray03 border rounded-md p-3 pr-10"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  console.log("enter", searchTerm);
+                  setSearchResult([...searchResult, searchTerm]);
+                }
+              }}
+            />
+            <span
+              className="absolute right-3 top-3 cursor-pointer"
+              onClick={() => setSearchResult([...searchResult, searchTerm])}
+            >
+              <SearchIcon />
+            </span>
+          </div>
+          {searchResult.length === 0 ? (
+            <div className="min-h-80 flex items-center justify-center">
+              검색어를 입력해주세요
+            </div>
+          ) : (
+            <div className="grid grid-cols-3 gap-2 overflow-y-auto max-h-80">
+              {Array.from({ length: 12 }).map((_, idx) => (
+                <div
+                  key={idx}
+                  className="w-full aspect-square bg-gray03 rounded-lg"
+                ></div>
+              ))}
+            </div>
+          )}
+        </div>
       </BottomSheet>
       {/* 이미지 검색 모달 */}
     </>
