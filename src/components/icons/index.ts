@@ -16,6 +16,8 @@ import CheckedBlackIcon from "./CheckedBlackIcon";
 import CheckedGreenIcon from "./CheckedGreenIcon";
 import RadioIcon from "./RadioIcon";
 import SearchIcon from "./SearchIcon";
+import EmptyHeartIcon from "./EmptyHeartIcon";
+import HeartIcon from "./HeartIcon";
 
 export {
   CircleAddIcon,
@@ -36,4 +38,6 @@ export {
   CheckedGreenIcon,
   RadioIcon,
   SearchIcon,
+  EmptyHeartIcon,
+  HeartIcon,
 };
