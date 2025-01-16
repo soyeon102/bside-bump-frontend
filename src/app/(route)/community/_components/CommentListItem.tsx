@@ -1,9 +1,19 @@
 "use client";
 
 import { EmptyHeartIcon, HeartIcon } from "@/components/icons";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-const CommentListItem = ({ comment }: { comment: string }) => {
+const CommentListItem = ({
+  boardId,
+  comment,
+}: {
+  boardId: number;
+  comment: string;
+}) => {
+  const router = useRouter();
+  const tempCommentId = 1;
+
   const [isLiked, setIsLiked] = useState(false);
 
   return (
@@ -21,7 +31,14 @@ const CommentListItem = ({ comment }: { comment: string }) => {
           <p className="text-xs text-gray05">123</p>
         </div>
       </div>
-      <button className="text-xs text-gray05 w-fit">신고하기</button>
+      <button
+        className="text-xs text-gray05 w-fit"
+        onClick={() =>
+          router.push(`${boardId}/report?commentId=${tempCommentId}`)
+        }
+      >
+        신고하기
+      </button>
     </div>
   );
 };
