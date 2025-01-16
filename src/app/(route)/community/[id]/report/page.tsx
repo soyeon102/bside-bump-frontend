@@ -5,7 +5,7 @@ import { useState } from "react";
 
 import Button from "@/components/Button";
 import Header from "@/components/Header";
-import { CheckedBlackIcon, RadioIcon } from "@/components/icons";
+import { RadioIcon } from "@/components/icons";
 
 const reasonList = [
   { id: 1, text: "본문과 관련 없는 내용" },
@@ -17,8 +17,8 @@ const reasonList = [
 
 const ReportPage = () => {
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const commentId = searchParams.get("commentId");
+  // const searchParams = useSearchParams();
+  // const commentId = searchParams.get("commentId");
 
   const [selectedReason, setSelectedReason] = useState<number>(1);
   const [etcReason, setEtcReason] = useState<string>("");
