@@ -111,8 +111,14 @@ const CommunityDetailPage = ({
         </div>
         <hr className="border-gray04 border-b-4" />
         <div className="py-7 px-6 flex flex-col gap-3">
-          <CommentListItem comment="아니 돈아깝게 그걸 산다고? 미쳤어???" />
-          <CommentListItem comment="난 사도 괜찮을 거 같은데? 두달만 라면만 먹으면 되지 ㅋㅋㅋㅋㅋ..ㅎㅎ" />
+          <CommentListItem
+            boardId={Number(params.id)}
+            comment="아니 돈아깝게 그걸 산다고? 미쳤어???"
+          />
+          <CommentListItem
+            boardId={Number(params.id)}
+            comment="난 사도 괜찮을 거 같은데? 두달만 라면만 먹으면 되지 ㅋㅋㅋㅋㅋ..ㅎㅎ"
+          />
         </div>
       </div>
       <div className="fixed bottom-0 px-6 py-2 w-layout bg-white border-t border-gray04">
