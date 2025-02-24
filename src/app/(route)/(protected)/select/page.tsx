@@ -1,7 +1,7 @@
 "use client";
 
-import { ChangeEvent, useEffect, useState } from "react";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { ChangeEvent, useEffect, useState, useRef } from "react";
+import { useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { customAlphabet } from "nanoid";
 
@@ -24,6 +24,7 @@ import {
   Condition,
 } from "@/types/item";
 import Loading from "@/app/loading";
+import Image from "next/image";
 
 type PostItemType = {
   name: string;
@@ -31,6 +32,14 @@ type PostItemType = {
   type: Condition;
   recommendedItems?: RecommendedItem[];
 };
+
+interface SearchResponse {
+  urls: {
+    small: string;
+    raw: string;
+    full: string;
+  }[];
+}
 
 const SelectPage = () => {
   const {
@@ -43,6 +52,24 @@ const SelectPage = () => {
     resetItemList,
   } = useStore();
 
+  const router = useRouter();
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  const [selectedCategory, setSelectedCategory] = useState<number>(1);
+  const [isBottomSheetOpen, setIsBottomSheetOpen] = useState<boolean>(false);
+  const [isAlertOpen, setIsAlertOpen] = useState<boolean>(false);
+  const [alertMessage, setAlertMessage] = useState<string>("");
+  const [addItemName, setAddItemName] = useState<string>("");
+  const [addItemPrice, setAddItemPrice] = useState<number | null>(null);
+  const [isSearchImageModalOpen, setIsSearchImageModalOpen] =
+    useState<boolean>(false);
+  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [queryTerm, setQueryTerm] = useState<string>("");
+
+  const { handlePriceChange } = usePriceChange(setAddItemPrice);
+
+  const nanoid = customAlphabet("0123456789", 10);
+
   const { data, isLoading, isSuccess } = useQuery<CategoryData[]>({
     queryKey: ["category"],
     queryFn: async () => {
@@ -54,21 +81,32 @@ const SelectPage = () => {
     },
   });
 
-  const router = useRouter();
+  const {
+    data: searchData,
+    isLoading: isSearchLoading,
+    isFetching: isSearchFetching,
 
-  const [selectedCategory, setSelectedCategory] = useState<number>(1);
-  const [isBottomSheetOpen, setIsBottomSheetOpen] = useState<boolean>(false);
-  const [isAlertOpen, setIsAlertOpen] = useState<boolean>(false);
-  const [alertMessage, setAlertMessage] = useState<string>("");
-  const [addItemName, setAddItemName] = useState<string>("");
-  const [addItemPrice, setAddItemPrice] = useState<number | null>(null);
-  const [isSearchImageModalOpen, setIsSearchImageModalOpen] =
-    useState<boolean>(false);
-  const [searchTerm, setSearchTerm] = useState<string>("");
-  const [searchResult, setSearchResult] = useState<string[]>([]);
-  const { handlePriceChange } = usePriceChange(setAddItemPrice);
+    fetchNextPage,
+    hasNextPage,
+    refetch,
+  } = useInfiniteQuery({
+    queryKey: ["searchList", queryTerm],
+    queryFn: async ({ pageParam = 1 }) => {
+      const res = await fetch(
+        `${API_URL}/category/image?keyword=${queryTerm}&page=${pageParam}`
+      );
+      const data = (await res.json()) as SearchResponse;
+      return data.urls;
+    },
+    getNextPageParam: (lastPage) => {
+      return lastPage.length > 0 ? lastPage.length + 1 : undefined;
+    },
+    initialPageParam: 1,
+    enabled: false,
+  });
 
-  const nanoid = customAlphabet("0123456789", 10);
+  console.log("searchData", searchData);
+  console.log("isSearchFetching", isSearchFetching);
 
   useEffect(() => {
     if (isSuccess) {
@@ -81,6 +119,17 @@ const SelectPage = () => {
   useEffect(() => {
     resetItemList();
   }, []);
+
+  // queryTerm이바뀔 때마다 스크롤 초기화
+  useEffect(() => {
+    if (queryTerm) {
+      requestAnimationFrame(() => {
+        if (scrollRef.current) {
+          scrollRef.current.scrollTop = 0;
+        }
+      });
+    }
+  }, [searchData?.pages[0], queryTerm]);
 
   const openBottomSheet = () => {
     if (selectCondition === "MORE" && selectItemList.length >= 3) {
@@ -196,6 +245,29 @@ const SelectPage = () => {
       type: selectCondition,
       recommendedItems: selectItemList,
     });
+  };
+
+  const handleSearch = async () => {
+    if (!searchTerm) return;
+    setQueryTerm(searchTerm);
+    // await fetchNextPage();
+  };
+
+  useEffect(() => {
+    if (queryTerm) {
+      refetch();
+    }
+  }, [queryTerm]);
+
+  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
+    const { scrollHeight, scrollTop, clientHeight } = e.currentTarget;
+    if (
+      scrollHeight - scrollTop <= clientHeight * 1.5 &&
+      hasNextPage &&
+      !isSearchLoading
+    ) {
+      fetchNextPage();
+    }
   };
 
   if (isLoading) {
@@ -330,6 +402,7 @@ const SelectPage = () => {
               onClick={() => setIsSearchImageModalOpen(true)}
             >
               <p className="mr-2">이미지 검색</p>
+
               <SearchIcon />
             </div>
           </div>
@@ -376,30 +449,52 @@ const SelectPage = () => {
               onChange={(e) => setSearchTerm(e.target.value)}
               onKeyDown={(e) => {
                 if (e.key === "Enter") {
-                  console.log("enter", searchTerm);
-                  setSearchResult([...searchResult, searchTerm]);
+                  handleSearch();
                 }
               }}
             />
             <span
               className="absolute right-3 top-3 cursor-pointer"
-              onClick={() => setSearchResult([...searchResult, searchTerm])}
+              onClick={handleSearch}
             >
               <SearchIcon />
             </span>
           </div>
-          {searchResult.length === 0 ? (
+          {(!searchData && !isSearchFetching) ||
+          searchData?.pages.flat().length === 0 ? (
             <div className="min-h-80 flex items-center justify-center">
-              검색어를 입력해주세요
+              {searchData?.pages.flat().length === 0
+                ? `검색 결과가 없습니다.`
+                : `검색어를 입력해주세요`}
             </div>
           ) : (
-            <div className="grid grid-cols-3 gap-2 overflow-y-auto max-h-80">
-              {Array.from({ length: 12 }).map((_, idx) => (
-                <div
-                  key={idx}
-                  className="w-full aspect-square bg-gray03 rounded-lg"
-                ></div>
-              ))}
+            <div
+              ref={scrollRef}
+              className="grid grid-cols-3 gap-2 overflow-y-auto h-full max-h-80"
+              onScroll={handleScroll}
+            >
+              {isSearchLoading
+                ? Array.from({ length: 12 }).map((_, idx) => (
+                    <div
+                      key={idx}
+                      className="w-full aspect-square bg-gray03 rounded-lg"
+                    ></div>
+                  ))
+                : searchData?.pages.flat().map((item, idx) => (
+                    <div
+                      key={idx}
+                      className="w-full aspect-square rounded-lg overflow-hidden border cursor-pointer"
+                    >
+                      <Image
+                        className="object-cover w-full h-full"
+                        src={item.small}
+                        alt="search-item"
+                        width={0}
+                        height={0}
+                        sizes="100vw"
+                      />
+                    </div>
+                  ))}
             </div>
           )}
         </div>
