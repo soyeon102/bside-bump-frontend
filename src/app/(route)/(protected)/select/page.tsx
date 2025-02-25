@@ -10,7 +10,12 @@ import Chip from "@/components/Chip";
 import Alert from "@/components/Alert";
 import BottomSheet from "@/components/BottomSheet";
 import { TextField } from "@/components/TextField";
-import { CircleAddIcon, AddItemIcon, SearchIcon } from "@/components/icons";
+import {
+  CircleAddIcon,
+  AddItemIcon,
+  SearchIcon,
+  CheckedIcon,
+} from "@/components/icons";
 import Item from "./_components/Item";
 
 import { useStore } from "@/store/useStore";
@@ -23,6 +28,7 @@ import {
   RecommendedItem,
   Condition,
 } from "@/types/item";
+
 import Loading from "@/app/loading";
 import Image from "next/image";
 
@@ -65,6 +71,7 @@ const SelectPage = () => {
     useState<boolean>(false);
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [queryTerm, setQueryTerm] = useState<string>("");
+  const [selectImage, setSelectImage] = useState<string>("");
 
   const { handlePriceChange } = usePriceChange(setAddItemPrice);
 
@@ -85,7 +92,6 @@ const SelectPage = () => {
     data: searchData,
     isLoading: isSearchLoading,
     isFetching: isSearchFetching,
-
     fetchNextPage,
     hasNextPage,
     refetch,
@@ -98,15 +104,15 @@ const SelectPage = () => {
       const data = (await res.json()) as SearchResponse;
       return data.urls;
     },
-    getNextPageParam: (lastPage) => {
-      return lastPage.length > 0 ? lastPage.length + 1 : undefined;
+    getNextPageParam: (lastPage, allPages) => {
+      // 데이터가 없으면 다음 페이지 없음
+      if (!lastPage || lastPage.length === 0) return undefined;
+      // 다음 페이지는 현재 페이지 수 + 1
+      return allPages.length + 1;
     },
     initialPageParam: 1,
     enabled: false,
   });
-
-  console.log("searchData", searchData);
-  console.log("isSearchFetching", isSearchFetching);
 
   useEffect(() => {
     if (isSuccess) {
@@ -149,6 +155,7 @@ const SelectPage = () => {
   const closeBottomSheet = () => {
     setAddItemName("");
     setAddItemPrice(null);
+    setSelectImage("");
     setIsBottomSheetOpen(false);
   };
 
@@ -183,6 +190,7 @@ const SelectPage = () => {
       id: Number(nanoid()),
       name: addItemName,
       price: Number(addItemPrice),
+      iconUrl: selectImage ? selectImage : "",
     });
     closeBottomSheet();
   };
@@ -268,6 +276,12 @@ const SelectPage = () => {
     ) {
       fetchNextPage();
     }
+  };
+
+  console.log("searchData", searchData);
+
+  const handleSelectImage = (imageSrc: string) => {
+    setSelectImage(imageSrc);
   };
 
   if (isLoading) {
@@ -398,12 +412,26 @@ const SelectPage = () => {
               <p className="text-sm">*선택한 이미지는 결과지에 표시돼요</p>
             </div>
             <div
-              className="h-12 border-gray03 border rounded-md p-3 flex items-center cursor-pointer"
+              className="h-12 border-gray03 border rounded-md p-3 flex items-center cursor-pointer justify-between"
               onClick={() => setIsSearchImageModalOpen(true)}
             >
-              <p className="mr-2">이미지 검색</p>
-
-              <SearchIcon />
+              {selectImage ? (
+                <>
+                  <Image
+                    src={selectImage}
+                    alt="image"
+                    width={50}
+                    height={50}
+                    className="rounded-md"
+                  />
+                  <p>변경</p>
+                </>
+              ) : (
+                <>
+                  <p className="mr-2">이미지 검색</p>
+                  <SearchIcon />
+                </>
+              )}
             </div>
           </div>
         </div>
@@ -470,7 +498,7 @@ const SelectPage = () => {
           ) : (
             <div
               ref={scrollRef}
-              className="grid grid-cols-3 gap-2 overflow-y-auto h-full max-h-80"
+              className="grid grid-cols-3 gap-2 overflow-y-auto min-h-80 max-h-80"
               onScroll={handleScroll}
             >
               {isSearchLoading
@@ -480,21 +508,32 @@ const SelectPage = () => {
                       className="w-full aspect-square bg-gray03 rounded-lg"
                     ></div>
                   ))
-                : searchData?.pages.flat().map((item, idx) => (
-                    <div
-                      key={idx}
-                      className="w-full aspect-square rounded-lg overflow-hidden border cursor-pointer"
-                    >
-                      <Image
-                        className="object-cover w-full h-full"
-                        src={item.small}
-                        alt="search-item"
-                        width={0}
-                        height={0}
-                        sizes="100vw"
-                      />
-                    </div>
-                  ))}
+                : searchData?.pages
+                    .flat()
+                    .filter(Boolean)
+                    .map((item, idx) => (
+                      <div
+                        key={idx}
+                        className={`w-full aspect-square rounded-lg overflow-hidden border cursor-pointer relative`}
+                        onClick={() => handleSelectImage(item.small)}
+                      >
+                        <Image
+                          className={`object-cover w-full h-full ${
+                            item.small === selectImage && "brightness-50"
+                          }`}
+                          src={item.small}
+                          alt="search-item"
+                          width={0}
+                          height={0}
+                          sizes="100vw"
+                        />
+                        {item.small === selectImage && (
+                          <div className="absolute top-1 right-1">
+                            <CheckedIcon />
+                          </div>
+                        )}
+                      </div>
+                    ))}
             </div>
           )}
         </div>
