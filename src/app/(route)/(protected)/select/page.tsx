@@ -124,9 +124,11 @@ const SelectPage = () => {
 
   useEffect(() => {
     resetItemList();
-  }, []);
+  }, [resetItemList]);
 
   // queryTerm이바뀔 때마다 스크롤 초기화
+  const firstPageData = searchData?.pages[0];
+
   useEffect(() => {
     if (queryTerm) {
       requestAnimationFrame(() => {
@@ -135,7 +137,7 @@ const SelectPage = () => {
         }
       });
     }
-  }, [searchData?.pages[0], queryTerm]);
+  }, [firstPageData, queryTerm]);
 
   const openBottomSheet = () => {
     if (selectCondition === "MORE" && selectItemList.length >= 3) {
@@ -265,7 +267,7 @@ const SelectPage = () => {
     if (queryTerm) {
       refetch();
     }
-  }, [queryTerm]);
+  }, [queryTerm, refetch]);
 
   const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
     const { scrollHeight, scrollTop, clientHeight } = e.currentTarget;

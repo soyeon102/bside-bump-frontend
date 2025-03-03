@@ -29,7 +29,7 @@ const ProtectedLayout = ({
       setIsAlertOpen(true);
     }
     setIsLoading(false);
-  }, [router]);
+  }, [id, thatItemName, thatItemPrice]);
 
   const handleRedirect = () => {
     setIsLoading(true);
