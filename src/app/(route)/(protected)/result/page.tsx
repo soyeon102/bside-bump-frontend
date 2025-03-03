@@ -31,6 +31,7 @@ interface RecommendedItemType {
   percentage: number;
   quantity: number;
   change: number;
+  imageUrl: string;
 }
 
 interface DataType {
@@ -56,6 +57,7 @@ const ResultPage = () => {
 
   const { thatItemName, thatItemPrice, selectCondition, setResultItem } =
     useStore();
+
   const { data, isLoading, isSuccess } = useQuery<DataType>({
     queryKey: ["result", id],
     queryFn: async () => {
@@ -63,6 +65,7 @@ const ResultPage = () => {
 
       const res = await fetch(`${API_URL}/result/${id}`, { cache: "no-store" });
       const data = await res.json();
+
       setResultItem(data);
       return data;
     },
@@ -230,9 +233,11 @@ const ResultPage = () => {
                       className="w-full flex flex-col justify-center"
                     >
                       <div
-                        className={`min-w-28 w-fill-available h-auto mx-12 aspect-square rounded-xl overflow-hidde relative bg-contain bg-no-repeat bg-center`}
+                        className={`min-w-28 w-fill-available h-auto mx-12 aspect-square rounded-xl overflow-hidde relative bg-cover bg-no-repeat bg-center`}
                         style={{
-                          backgroundImage: `url("${API_URL}/public/images/icons/${item.iconUrl}")`,
+                          backgroundImage: item.iconUrl
+                            ? `url("${API_URL}/public/images/icons/${item.iconUrl}")`
+                            : `url("${item.imageUrl}")`,
                         }}
                       >
                         {data.recommendationType === "MORE" && (

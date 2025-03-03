@@ -5,6 +5,7 @@ export interface SelectedItem {
   name: string;
   price: number;
   iconUrl?: string;
+  imageUrl?: string;
 }
 
 export interface CategoryData {
