@@ -26,6 +26,7 @@ const config: Config = {
       width: {
         layout: "var(--min-layout-size)",
         "fill-available": "-webkit-fill-available",
+        vote: "var(--vote-width)",
       },
       maxWidth: {
         layout: "var(--min-layout-size)",

@@ -4,9 +4,20 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 
 import Button from "@/components/Button";
-import { useStore } from "@/store/useStore";
+import { useStore, useUserIdStore } from "@/store/useStore";
 import { formatDate, formatWithCommas } from "@/utils";
 import { CheckedBlackIcon, RadioIcon } from "@/components/icons";
+import { useMutation } from "@tanstack/react-query";
+import { API_URL } from "@/constants/url.const";
+import { v4 as uuidv4 } from "uuid";
+
+type PostFormType = {
+  resultId: string;
+  userId: string;
+  description: string;
+  pollItems?: { option: string }[];
+  pollEndAt?: string;
+};
 
 const today = new Date();
 
@@ -42,11 +53,81 @@ const FormPage = () => {
   const [isVote, setIsVote] = useState(false);
   const [selectPeriod, setSelectPeriod] = useState(1);
   const [selectType, setSelectType] = useState(0);
+  const [customOptions, setCustomOptions] = useState<string[]>(["", ""]);
+
+  const userId = useUserIdStore((state) => state.userId);
+  const setUserId = useUserIdStore((state) => state.setUserId);
+
+  const postForm = useMutation({
+    mutationKey: ["postForm"],
+    mutationFn: async (body: PostFormType) =>
+      await fetch(`${API_URL}/post`, {
+        method: "POST",
+        body: JSON.stringify(body),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }),
+    onSuccess: async () => {
+      alert("게시글이 등록되었습니다.");
+      router.push(`/community`);
+    },
+  });
+
+  const handlePostForm = async () => {
+    if (!resultItem) {
+      alert("다시 해주세요");
+      return router.push("/");
+    }
+
+    let body: PostFormType;
+
+    if (!localStorage.getItem("user-id") && !userId) {
+      setUserId(uuidv4());
+    }
+
+    if (isVote) {
+      body = {
+        userId: userId as string,
+        resultId: resultItem?.id,
+        description: textValue,
+        pollItems:
+          selectType === 0
+            ? [{ option: "참는다" }, { option: "지른다" }]
+            : [{ option: customOptions[0] }, { option: customOptions[1] }],
+        pollEndAt:
+          selectPeriod === 1
+            ? new Date(
+                today.getFullYear(),
+                today.getMonth(),
+                today.getDate() + 1
+              ).toISOString()
+            : selectPeriod === 2
+            ? new Date(
+                today.getFullYear(),
+                today.getMonth(),
+                today.getDate() + 2
+              ).toISOString()
+            : new Date(
+                today.getFullYear(),
+                today.getMonth(),
+                today.getDate() + 7
+              ).toISOString(),
+      };
+    } else {
+      body = {
+        userId: userId as string,
+        resultId: resultItem?.id,
+        description: textValue,
+      };
+    }
+
+    postForm.mutate(body);
+  };
 
   if (!resultItem) {
     alert("다시 해주세요");
-    router.push("/");
-    return;
+    return router.push("/");
   }
 
   return (
@@ -163,12 +244,20 @@ const FormPage = () => {
                       className="w-full border rounded-md p-2 border-b-[#e5e7eb] text-sm"
                       placeholder="항목1"
                       maxLength={20}
+                      value={customOptions[0]}
+                      onChange={(e) =>
+                        setCustomOptions([e.target.value, customOptions[1]])
+                      }
                     />
                     <input
                       type="text"
                       className="w-full border rounded-md p-2 border-b-[#e5e7eb] text-sm"
                       placeholder="항목2"
                       maxLength={20}
+                      value={customOptions[1]}
+                      onChange={(e) =>
+                        setCustomOptions([customOptions[0], e.target.value])
+                      }
                     />
                   </div>
                 )}
@@ -178,7 +267,7 @@ const FormPage = () => {
         )}
       </div>
       <div className="mb-7">
-        <Button color="plain" onClick={() => alert("서비스 준비중입니다.")}>
+        <Button color="plain" onClick={handlePostForm}>
           게시하기
         </Button>
       </div>

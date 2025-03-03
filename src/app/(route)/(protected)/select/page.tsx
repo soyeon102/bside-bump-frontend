@@ -4,6 +4,7 @@ import { ChangeEvent, useEffect, useState, useRef } from "react";
 import { useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { customAlphabet } from "nanoid";
+import Image from "next/image";
 
 import Button from "@/components/Button";
 import Chip from "@/components/Chip";
@@ -18,6 +19,7 @@ import {
 } from "@/components/icons";
 import Item from "./_components/Item";
 
+import Loading from "@/app/loading";
 import { useStore } from "@/store/useStore";
 import { API_URL } from "@/constants/url.const";
 import { formatWithCommas } from "@/utils";
@@ -28,9 +30,6 @@ import {
   RecommendedItem,
   Condition,
 } from "@/types/item";
-
-import Loading from "@/app/loading";
-import Image from "next/image";
 
 type PostItemType = {
   name: string;
@@ -83,7 +82,7 @@ const SelectPage = () => {
       const res = await fetch(
         `${API_URL}/category?type=${selectCondition}&price=${thatItemPrice}`
       );
-      const data = res.json();
+      const data = await res.json();
       return data;
     },
   });
@@ -192,7 +191,8 @@ const SelectPage = () => {
       id: Number(nanoid()),
       name: addItemName,
       price: Number(addItemPrice),
-      iconUrl: selectImage ? selectImage : "",
+      iconUrl: "",
+      imageUrl: selectImage,
     });
     closeBottomSheet();
   };
@@ -223,6 +223,7 @@ const SelectPage = () => {
       name: item.name,
       price: Number(item.price),
       iconUrl: item.iconUrl,
+      imageUrl: "",
     });
   };
 
@@ -279,8 +280,6 @@ const SelectPage = () => {
       fetchNextPage();
     }
   };
-
-  console.log("searchData", searchData);
 
   const handleSelectImage = (imageSrc: string) => {
     setSelectImage(imageSrc);
