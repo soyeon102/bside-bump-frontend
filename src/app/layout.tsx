@@ -44,7 +44,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${suitVariable.className} antialiased`}>
+      <body
+        className={`${suitVariable.className} antialiased`}
+        suppressHydrationWarning
+      >
         <Providers>
           <div className="relative flex flex-col justify-center overflow-hidden bg-gray-100 min-h-inherit">
             <div className="absolute inset-0"></div>
