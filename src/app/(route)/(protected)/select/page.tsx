@@ -93,6 +93,7 @@ const SelectPage = () => {
     isFetching: isSearchFetching,
     fetchNextPage,
     hasNextPage,
+    isFetchingNextPage,
     refetch,
   } = useInfiniteQuery({
     queryKey: ["searchList", queryTerm],
@@ -497,44 +498,55 @@ const SelectPage = () => {
                 : `검색어를 입력해주세요`}
             </div>
           ) : (
-            <div
-              ref={scrollRef}
-              className="grid grid-cols-3 gap-2 overflow-y-auto min-h-80 max-h-80"
-              onScroll={handleScroll}
-            >
-              {isSearchLoading
-                ? Array.from({ length: 12 }).map((_, idx) => (
-                    <div
-                      key={idx}
-                      className="w-full aspect-square bg-gray03 rounded-lg"
-                    ></div>
-                  ))
-                : searchData?.pages
-                    .flat()
-                    .filter(Boolean)
-                    .map((item, idx) => (
-                      <div
-                        key={idx}
-                        className={`w-full aspect-square rounded-lg overflow-hidden border cursor-pointer relative`}
-                        onClick={() => handleSelectImage(item.small)}
-                      >
-                        <Image
-                          className={`object-cover w-full h-full ${
-                            item.small === selectImage && "brightness-50"
-                          }`}
-                          src={item.small}
-                          alt="search-item"
-                          width={0}
-                          height={0}
-                          sizes="100vw"
-                        />
-                        {item.small === selectImage && (
-                          <div className="absolute top-1 right-1">
-                            <CheckedIcon />
+            <div className="h-80 overflow-hidden">
+              <div
+                ref={scrollRef}
+                className="h-full overflow-y-auto"
+                onScroll={handleScroll}
+              >
+                <div className="grid grid-cols-3 gap-2">
+                  {isSearchLoading
+                    ? Array.from({ length: 12 }).map((_, idx) => (
+                        <div
+                          key={idx}
+                          className="w-full aspect-square bg-gray03 rounded-lg"
+                        ></div>
+                      ))
+                    : searchData?.pages
+                        .flat()
+                        .filter(Boolean)
+                        .map((item, idx) => (
+                          <div
+                            key={idx}
+                            className={`w-full aspect-square rounded-lg overflow-hidden cursor-pointer relative`}
+                            onClick={() => handleSelectImage(item.small)}
+                          >
+                            <Image
+                              className={`object-cover w-full h-full ${
+                                item.small === selectImage && "brightness-50"
+                              }`}
+                              src={item.small}
+                              alt="search-item"
+                              width={0}
+                              height={0}
+                              sizes="100vw"
+                            />
+                            {item.small === selectImage && (
+                              <div className="absolute top-1 right-1">
+                                <CheckedIcon />
+                              </div>
+                            )}
                           </div>
-                        )}
-                      </div>
+                        ))}
+                  {isFetchingNextPage &&
+                    Array.from({ length: 6 }).map((_, idx) => (
+                      <div
+                        key={`skeleton-${idx}`}
+                        className="w-full aspect-square bg-gray03 rounded-lg animate-pulse"
+                      ></div>
                     ))}
+                </div>
+              </div>
             </div>
           )}
         </div>
