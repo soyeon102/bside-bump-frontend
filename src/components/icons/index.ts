@@ -18,6 +18,7 @@ import RadioIcon from "./RadioIcon";
 import SearchIcon from "./SearchIcon";
 import EmptyHeartIcon from "./EmptyHeartIcon";
 import HeartIcon from "./HeartIcon";
+import SendIcon from "./SendIcon";
 
 export {
   CircleAddIcon,
@@ -40,4 +41,5 @@ export {
   SearchIcon,
   EmptyHeartIcon,
   HeartIcon,
+  SendIcon,
 };
