@@ -31,6 +31,13 @@ interface CommunityDataType {
   id: string;
   description: string;
   createdAt: string;
+  comments?: {
+    id: string;
+    content: string;
+    createdAt: string;
+    postId: string;
+    userId: string;
+  }[];
   optionCounts?: Record<string, number>;
   pollItems?: Array<{ option: string }>;
   pollEndAt?: string;

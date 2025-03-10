@@ -26,6 +26,14 @@ interface CommunityDataType {
   id: string;
   description: string;
   createdAt: string;
+  comments?: {
+    id: string;
+    content: string;
+    createdAt: string;
+    postId: string;
+    userId: string;
+  }[];
+  commentCounts?: number;
   optionCounts?: Record<string, number>;
   pollItems?: Array<{ option: string }>;
   pollEndAt?: string;
@@ -133,9 +141,9 @@ const ListItem = ({ item }: { item: CommunityDataType }) => {
             </div>
           </div>
         )}
-        {/* <div className="text-sm">
-          댓글 <span className="font-bold">9</span>
-        </div> */}
+        <div className="text-sm">
+          댓글 <span className="font-bold">{item.commentCounts || 0}</span>
+        </div>
       </Link>
     </li>
   );

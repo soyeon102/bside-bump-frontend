@@ -2,15 +2,21 @@
 
 import Header from "@/components/Header";
 import { useRouter } from "next/navigation";
-import { UserIcon, UserIconNoBg, CheckedGreenIcon } from "@/components/icons";
+import {
+  UserIcon,
+  UserIconNoBg,
+  CheckedGreenIcon,
+  SendIcon,
+} from "@/components/icons";
 import { useState } from "react";
-// import CommentListItem from "../_components/CommentListItem";
+import CommentListItem from "../_components/CommentListItem";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { API_URL } from "@/constants/url.const";
 import { formatRelativeTime } from "@/utils/formatRelativeTime";
 import { useUserIdStore } from "@/store/useStore";
 import Loading from "@/app/loading";
 import { formatWithCommas } from "@/utils";
+import { v4 as uuidv4 } from "uuid";
 
 type Condition = "MORE" | "EXPENSIVE";
 
@@ -35,6 +41,13 @@ interface CommunityDataType {
   id: string;
   description: string;
   createdAt: string;
+  comments?: {
+    id: string;
+    content: string;
+    createdAt: string;
+    postId: string;
+    userId: string;
+  }[];
   optionCounts?: Record<string, number>;
   pollItems?: Array<{ option: string }>;
   pollEndAt?: string;
@@ -60,7 +73,11 @@ const CommunityDetailPage = ({
 }) => {
   const router = useRouter();
   const userId = useUserIdStore((state) => state.userId);
+  const setUserId = useUserIdStore((state) => state.setUserId);
   const queryClient = useQueryClient();
+
+  const [voteItem, setVoteItem] = useState<string | null>(null);
+  const [comment, setComment] = useState<string>("");
 
   const { data, isLoading, isError } = useQuery<CommunityDataType>({
     queryKey: ["communityItem", params.id],
@@ -69,8 +86,6 @@ const CommunityDetailPage = ({
       return res.json();
     },
   });
-
-  const [voteItem, setVoteItem] = useState<string | null>(null);
 
   const postVote = useMutation({
     mutationKey: ["postVote"],
@@ -91,12 +106,35 @@ const CommunityDetailPage = ({
     },
   });
 
+  const postComment = useMutation({
+    mutationKey: ["postComment"],
+    mutationFn: async (body: { userId: string; content: string }) => {
+      const res = await fetch(`${API_URL}/post/${params.id}/comment`, {
+        method: "POST",
+        body: JSON.stringify(body),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      return res.json();
+    },
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: ["communityItem", params.id],
+      });
+      setComment("");
+    },
+  });
+
   const handleClickVoteItem = (option: string) => {
     setVoteItem(option);
   };
 
   const handleClickVote = async () => {
-    if (!userId || !voteItem) return;
+    if (!voteItem) return;
+    if (!localStorage.getItem("user-id") && !userId) {
+      setUserId(uuidv4());
+    }
 
     const body = {
       userId: userId as string,
@@ -104,6 +142,20 @@ const CommunityDetailPage = ({
     };
 
     postVote.mutate(body);
+  };
+
+  const handlePostComment = () => {
+    if (!comment) return;
+    if (!localStorage.getItem("user-id") && !userId) {
+      setUserId(uuidv4());
+    }
+
+    const body = {
+      userId: userId as string,
+      content: comment,
+    };
+
+    postComment.mutate(body);
   };
 
   if (isLoading) {
@@ -126,7 +178,7 @@ const CommunityDetailPage = ({
   return (
     <>
       <Header hasBack onClickBack={() => router.back()} title="" />
-      <div className="overflow-y-auto pb-16">
+      <div className="overflow-y-auto pb-20">
         <div className="py-7 px-6 flex flex-col gap-6 p-6">
           <div className="flex items-center gap-2">
             <UserIcon />
@@ -239,28 +291,48 @@ const CommunityDetailPage = ({
             </div>
           )}
 
-          {/* <div className="text-sm">
-            댓글 <span className="font-bold">4</span>
-          </div> */}
+          <div className="text-sm">
+            댓글 <span className="font-bold">{data.comments?.length || 0}</span>
+          </div>
         </div>
-        {/* <hr className="border-gray04 border-b-4" />
-        <div className="py-7 px-6 flex flex-col gap-3">
-          <CommentListItem
-            boardId={Number(params.id)}
-            comment="아니 돈아깝게 그걸 산다고? 미쳤어???"
-          />
-          <CommentListItem
-            boardId={Number(params.id)}
-            comment="난 사도 괜찮을 거 같은데? 두달만 라면만 먹으면 되지 ㅋㅋㅋㅋㅋ..ㅎㅎ"
-          />
-        </div> */}
+        <hr className="border-gray04 border-b-4" />
+        <div className="py-7 px-6 flex flex-col gap-7">
+          {data.comments?.map((comment) => (
+            <CommentListItem
+              key={comment.id}
+              boardId={comment.postId}
+              comment={comment.content}
+              createdAt={comment.createdAt}
+            />
+          ))}
+        </div>
       </div>
-      <div className="fixed bottom-0 px-6 py-2 w-layout bg-white border-t border-gray04">
-        <input
-          type="text"
-          className="w-full bg-gray04 rounded-3xl box-shadow-none outline-none border-none py-3 px-4"
-          placeholder="댓글을 남겨보세요"
-        />
+      <div className="fixed bottom-0 px-6 pt-2 pb-6 sm:w-layout w-full bg-white border-t border-gray04">
+        <div className="relative">
+          <input
+            type="text"
+            className="w-full bg-gray04 rounded-3xl box-shadow-none outline-none border-none py-3 px-4"
+            placeholder="댓글을 남겨보세요"
+            value={comment}
+            onChange={(e) => setComment(e.target.value)}
+          />
+
+          {comment ? (
+            <button
+              className="absolute right-4 top-1/2 -translate-y-1/2"
+              onClick={handlePostComment}
+            >
+              <SendIcon color="#009E36" />
+            </button>
+          ) : (
+            <button
+              disabled
+              className="absolute right-4 top-1/2 -translate-y-1/2"
+            >
+              <SendIcon />
+            </button>
+          )}
+        </div>
       </div>
     </>
   );
