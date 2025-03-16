@@ -73,20 +73,6 @@ const ResultPage = () => {
   });
 
   useEffect(() => {
-    history.pushState(null, "", location.href);
-
-    const handlePopState = () => {
-      history.pushState(null, "", location.href);
-    };
-
-    window.addEventListener("popstate", handlePopState);
-
-    return () => {
-      window.removeEventListener("popstate", handlePopState);
-    };
-  }, []);
-
-  useEffect(() => {
     if (!pageRef.current) return;
 
     const createBlob = async () => {
@@ -313,12 +299,12 @@ const ResultPage = () => {
             data-html2canvas-ignore={true}
           >
             <div className="flex flex-col gap-2">
-              <Button color="plain" onClick={() => router.push("/form")}>
+              <Button color="plain" onClick={() => router.replace("/form")}>
                 게시할래요
               </Button>
               <Button
                 color="transparent"
-                onClick={() => router.push("/community")}
+                onClick={() => router.replace("/community")}
               >
                 다른 사람 게시글 구경가기
               </Button>

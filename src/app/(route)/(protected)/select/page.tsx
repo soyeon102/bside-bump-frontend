@@ -244,7 +244,7 @@ const SelectPage = () => {
       }),
     onSuccess: async (res: Response) => {
       const data = await res.json();
-      router.push(`/result?id=${data.id}`);
+      router.replace(`/result?id=${data.id}`);
     },
   });
 

@@ -86,29 +86,6 @@ const CommunityPage = () => {
     },
   });
 
-  // 무한 스크롤 구현
-  // const observerRef = useRef<IntersectionObserver>();
-  // const lastItemRef = useCallback(
-  //   (node: HTMLElement | null) => {
-  //     if (isLoading) return;
-
-  //     if (observerRef.current) {
-  //       observerRef.current.disconnect();
-  //     }
-
-  //     observerRef.current = new IntersectionObserver((entries) => {
-  //       if (entries[0].isIntersecting && hasNextPage) {
-  //         fetchNextPage();
-  //       }
-  //     });
-
-  //     if (node) {
-  //       observerRef.current.observe(node);
-  //     }
-  //   },
-  //   [isLoading, hasNextPage, fetchNextPage]
-  // );
-
   const handleClickToggle = () => setIsOngoing(!isOngoing);
 
   const handleClickFilterItem = (val: string) => {
@@ -133,6 +110,8 @@ const CommunityPage = () => {
       </div>
     );
   }
+
+  console.log("data", data);
 
   return (
     <div className="mt-2">
