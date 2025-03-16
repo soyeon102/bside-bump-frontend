@@ -201,11 +201,13 @@ const CommunityDetailPage = ({
                 : `${data.result.suggestedItems[0].name} ${data.result.suggestedItems[0].percentage}%`}
             </p>
           </div>
-          <div
-            className={`text-gray01 min-h-24 max-h-textbox whitespace-pre-wrap overflow-y-auto`}
-          >
-            {data.description}
-          </div>
+          {data.description && (
+            <div
+              className={`text-gray01 min-h-24 max-h-textbox whitespace-pre-wrap overflow-y-auto`}
+            >
+              {data.description}
+            </div>
+          )}
           {/* 투표 영역 */}
           {Array.isArray(data.pollItems) && data.pollItems.length > 0 && (
             <div className="p-4 rounded-2xl border-gray03 border">
