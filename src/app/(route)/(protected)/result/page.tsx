@@ -173,7 +173,7 @@ const ResultPage = () => {
   };
 
   const handleClickReset = () => {
-    window.location.replace("/ask-item");
+    window.location.replace("/");
   };
 
   useEffect(() => {
@@ -299,12 +299,12 @@ const ResultPage = () => {
             data-html2canvas-ignore={true}
           >
             <div className="flex flex-col gap-2">
-              <Button color="plain" onClick={() => router.push("/form")}>
+              <Button color="plain" onClick={() => router.replace("/form")}>
                 게시할래요
               </Button>
               <Button
                 color="transparent"
-                onClick={() => router.push("/community")}
+                onClick={() => router.replace("/community")}
               >
                 다른 사람 게시글 구경가기
               </Button>

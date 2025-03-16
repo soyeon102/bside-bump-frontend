@@ -55,7 +55,9 @@ const Navbar = () => {
       hasBack={findRoute.hasBack}
       title={findRoute.title}
       onClickBack={
-        pathname === "/ask-item" ? handleClickToHome : handleClickBack
+        pathname === "/ask-item" || pathname === "/community"
+          ? handleClickToHome
+          : handleClickBack
       }
     />
   ) : null;

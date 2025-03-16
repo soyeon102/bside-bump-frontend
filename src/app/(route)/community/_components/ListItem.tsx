@@ -83,11 +83,13 @@ const ListItem = ({ item }: { item: CommunityDataType }) => {
             </>
           )}
         </div>
-        <div
-          className={`text-gray01 min-h-24 max-h-textbox whitespace-pre-wrap text-ellipsis overflow-hidden line-clamp-4`}
-        >
-          {item.description}
-        </div>
+        {item.description && (
+          <div
+            className={`text-gray01 min-h-24 max-h-textbox whitespace-pre-wrap text-ellipsis overflow-hidden line-clamp-4`}
+          >
+            {item.description}
+          </div>
+        )}
         {Array.isArray(item?.pollItems) && item.pollItems.length > 0 && (
           <div className="p-4 rounded-2xl border-gray03 border">
             <div className="flex items-center justify-between mb-3">
