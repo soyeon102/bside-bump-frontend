@@ -111,8 +111,6 @@ const CommunityPage = () => {
     );
   }
 
-  console.log("data", data);
-
   return (
     <div className="mt-2">
       <div className="flex flex-col gap-2 px-6">

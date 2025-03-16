@@ -5,6 +5,7 @@ export const formatRelativeTime = (dateString: string) => {
   const now = new Date();
   const diff = Math.floor((now.getTime() - date.getTime()) / 1000); // 초 단위 차이
 
+  if (diff <= 0) return "방금 전";
   if (diff < 60) return `${diff}초 전`;
   const diffMinutes = Math.floor(diff / 60);
   if (diffMinutes < 60) return `${diffMinutes}분 전`;

@@ -2,12 +2,7 @@
 
 import Header from "@/components/Header";
 import { useRouter } from "next/navigation";
-import {
-  UserIcon,
-  UserIconNoBg,
-  CheckedGreenIcon,
-  SendIcon,
-} from "@/components/icons";
+import { UserIcon, UserIconNoBg, CheckedGreenIcon } from "@/components/icons";
 import { useState } from "react";
 import CommentListItem from "../_components/CommentListItem";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -17,6 +12,7 @@ import { useUserIdStore } from "@/store/useStore";
 import Loading from "@/app/loading";
 import { formatWithCommas } from "@/utils";
 import { v4 as uuidv4 } from "uuid";
+import CommentInput from "../_components/CommentInput";
 
 type Condition = "MORE" | "EXPENSIVE";
 
@@ -82,7 +78,6 @@ const CommunityDetailPage = ({
   const queryClient = useQueryClient();
 
   const [voteItem, setVoteItem] = useState<string | null>(null);
-  const [comment, setComment] = useState<string>("");
 
   const { data, isLoading, isError } = useQuery<CommunityDataType>({
     queryKey: ["communityItem", params.id],
@@ -111,26 +106,6 @@ const CommunityDetailPage = ({
     },
   });
 
-  const postComment = useMutation({
-    mutationKey: ["postComment"],
-    mutationFn: async (body: { userId: string; content: string }) => {
-      const res = await fetch(`${API_URL}/post/${params.id}/comment`, {
-        method: "POST",
-        body: JSON.stringify(body),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      return res.json();
-    },
-    onSuccess: async () => {
-      await queryClient.invalidateQueries({
-        queryKey: ["communityItem", params.id],
-      });
-      setComment("");
-    },
-  });
-
   const handleClickVoteItem = (option: string) => {
     setVoteItem(option);
   };
@@ -147,20 +122,6 @@ const CommunityDetailPage = ({
     };
 
     postVote.mutate(body);
-  };
-
-  const handlePostComment = () => {
-    if (!comment) return;
-    if (!localStorage.getItem("user-id") && !userId) {
-      setUserId(uuidv4());
-    }
-
-    const body = {
-      userId: userId as string,
-      content: comment,
-    };
-
-    postComment.mutate(body);
   };
 
   if (isLoading) {
@@ -189,7 +150,7 @@ const CommunityDetailPage = ({
             <UserIcon />
             <p className="font-bold text-gray01">익명</p>
             <p className="text-gray02 text-xs bg-gray04 rounded-md text-center px-1 py-[2px]">
-              {formatRelativeTime(data.createdAt)}
+              {formatRelativeTime(data?.createdAt || "")}
             </p>
           </div>
           <div className="w-full border-l-2 py-2 px-4 border-primary04 flex flex-col gap-2 bg-primary01 bg-opacity-10">
@@ -316,33 +277,7 @@ const CommunityDetailPage = ({
           ))}
         </div>
       </div>
-      <div className="fixed bottom-0 px-6 pt-2 pb-6 sm:w-layout w-full bg-white border-t border-gray04">
-        <div className="relative">
-          <input
-            type="text"
-            className="w-full bg-gray04 rounded-3xl box-shadow-none outline-none border-none py-3 px-4"
-            placeholder="댓글을 남겨보세요"
-            value={comment}
-            onChange={(e) => setComment(e.target.value)}
-          />
-
-          {comment ? (
-            <button
-              className="absolute right-4 top-1/2 -translate-y-1/2"
-              onClick={handlePostComment}
-            >
-              <SendIcon color="#009E36" />
-            </button>
-          ) : (
-            <button
-              disabled
-              className="absolute right-4 top-1/2 -translate-y-1/2"
-            >
-              <SendIcon />
-            </button>
-          )}
-        </div>
-      </div>
+      <CommentInput postId={params.id} />
     </>
   );
 };
