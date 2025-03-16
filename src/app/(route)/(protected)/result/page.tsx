@@ -73,6 +73,20 @@ const ResultPage = () => {
   });
 
   useEffect(() => {
+    history.pushState(null, "", location.href);
+
+    const handlePopState = () => {
+      history.pushState(null, "", location.href);
+    };
+
+    window.addEventListener("popstate", handlePopState);
+
+    return () => {
+      window.removeEventListener("popstate", handlePopState);
+    };
+  }, []);
+
+  useEffect(() => {
     if (!pageRef.current) return;
 
     const createBlob = async () => {
@@ -173,7 +187,7 @@ const ResultPage = () => {
   };
 
   const handleClickReset = () => {
-    window.location.replace("/ask-item");
+    window.location.replace("/");
   };
 
   useEffect(() => {
