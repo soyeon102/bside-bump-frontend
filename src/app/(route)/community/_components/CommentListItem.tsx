@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import { EmptyHeartIcon, HeartIcon } from "@/components/icons";
@@ -192,12 +193,12 @@ const CommentListItem = ({
           <p className="text-xs text-gray05">{commentLikes.length || 0}</p>
         </div>
       </div>
-      <button
+      {/* <button
         className="text-xs text-gray05 w-fit"
         onClick={() => router.push(`${boardId}/report?commentId=${commentId}`)}
       >
         신고하기
-      </button>
+      </button> */}
     </div>
   );
 };
