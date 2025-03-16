@@ -37,6 +37,10 @@ interface DataType {
   suggestedItems: RecommendedItemType[];
 }
 
+interface CommentLikesType {
+  userId: string;
+}
+
 interface CommunityDataType {
   id: string;
   description: string;
@@ -47,6 +51,7 @@ interface CommunityDataType {
     createdAt: string;
     postId: string;
     userId: string;
+    commentLikes: CommentLikesType[];
   }[];
   optionCounts?: Record<string, number>;
   pollItems?: Array<{ option: string }>;
@@ -302,9 +307,11 @@ const CommunityDetailPage = ({
           {data.comments?.map((comment) => (
             <CommentListItem
               key={comment.id}
+              commentId={comment.id}
               boardId={comment.postId}
               comment={comment.content}
               createdAt={comment.createdAt}
+              commentLikes={comment.commentLikes}
             />
           ))}
         </div>
