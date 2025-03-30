@@ -556,15 +556,18 @@ const SelectPage = () => {
             </div>
           )}
         </div>
-        <button
-          className="absolute bottom-8 right-10 bg-black text-primary02 py-2.5 px-6 font-bold rounded-3xl"
-          onClick={() => {
-            setSelectedImage(selectImage);
-            setIsSearchImageModalOpen(false);
-          }}
-        >
-          확인
-        </button>
+        {searchData && (
+          <button
+            className="absolute bottom-8 right-10 bg-black text-primary02 py-2.5 px-6 font-bold rounded-3xl disabled:bg-gray03 disabled:text-white"
+            onClick={() => {
+              setSelectedImage(selectImage);
+              setIsSearchImageModalOpen(false);
+            }}
+            disabled={selectImage === ""}
+          >
+            확인
+          </button>
+        )}
       </BottomSheet>
 
       {/* 이미지 검색 모달 */}
