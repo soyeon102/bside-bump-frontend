@@ -70,7 +70,10 @@ const SelectPage = () => {
     useState<boolean>(false);
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [queryTerm, setQueryTerm] = useState<string>("");
+  // 이미지 검색 모달에서 선택된 이미지 체크 표시
   const [selectImage, setSelectImage] = useState<string>("");
+  // 이미지 검색 모달에서 확인 버튼 클릭 후 최종 선택된 이미지
+  const [selectedImage, setSelectedImage] = useState<string>("");
 
   const { handlePriceChange } = usePriceChange(setAddItemPrice);
 
@@ -193,7 +196,7 @@ const SelectPage = () => {
       name: addItemName,
       price: Number(addItemPrice),
       iconUrl: "",
-      imageUrl: selectImage,
+      imageUrl: selectedImage,
     });
     closeBottomSheet();
   };
@@ -417,10 +420,10 @@ const SelectPage = () => {
               className="h-12 border-gray03 border rounded-md p-3 flex items-center cursor-pointer justify-between"
               onClick={() => setIsSearchImageModalOpen(true)}
             >
-              {selectImage ? (
+              {selectedImage ? (
                 <>
                   <Image
-                    src={selectImage}
+                    src={selectedImage}
                     alt="image"
                     width={50}
                     height={50}
@@ -463,9 +466,12 @@ const SelectPage = () => {
       {/* 이미지 검색 모달 */}
       <BottomSheet
         isOpen={isSearchImageModalOpen}
-        onClose={() => setIsSearchImageModalOpen(false)}
+        onClose={() => {
+          setIsSearchImageModalOpen(false);
+          setSelectImage("");
+        }}
       >
-        <div className="mb-6">
+        <div className="relative">
           <div className="mb-3 flex items-center justify-between flex-wrap">
             <p>이미지 직접 추가</p>
             <p className="text-sm">*선택한 이미지는 결과지에 표시돼요</p>
@@ -492,13 +498,13 @@ const SelectPage = () => {
           </div>
           {(!searchData && !isSearchFetching) ||
           searchData?.pages.flat().length === 0 ? (
-            <div className="min-h-80 flex items-center justify-center">
+            <div className="min-h-80 -mb-6 flex items-center justify-center">
               {searchData?.pages.flat().length === 0
                 ? `검색 결과가 없습니다.`
                 : `검색어를 입력해주세요`}
             </div>
           ) : (
-            <div className="h-80 overflow-hidden">
+            <div className="h-80 overflow-hidden -mb-6">
               <div
                 ref={scrollRef}
                 className="h-full overflow-y-auto"
@@ -550,7 +556,17 @@ const SelectPage = () => {
             </div>
           )}
         </div>
+        <button
+          className="absolute bottom-8 right-10 bg-black text-primary02 py-2.5 px-6 font-bold rounded-3xl"
+          onClick={() => {
+            setSelectedImage(selectImage);
+            setIsSearchImageModalOpen(false);
+          }}
+        >
+          확인
+        </button>
       </BottomSheet>
+
       {/* 이미지 검색 모달 */}
     </>
   );

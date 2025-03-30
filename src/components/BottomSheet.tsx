@@ -22,7 +22,7 @@ const BottomSheet = ({
 
   return (
     <div
-      className={`fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-end transition-opacity duration-300 ${
+      className={`fixed z-40 inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-end transition-opacity duration-300 ${
         isOpen ? "opacity-100" : "opacity-0 pointer-events-none"
       }`}
       onClick={onClose}
