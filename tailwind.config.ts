@@ -37,6 +37,7 @@ const config: Config = {
       },
       minHeight: {
         inherit: "inherit",
+        fullWithNavbar: "calc(100dvh - 3rem)",
       },
       maxHeight: {
         textbox: "var(--textbox-height)",

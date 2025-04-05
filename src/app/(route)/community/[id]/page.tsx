@@ -2,8 +2,13 @@
 
 import Header from "@/components/Header";
 import { useRouter } from "next/navigation";
-import { UserIcon, UserIconNoBg, CheckedGreenIcon } from "@/components/icons";
-import { useState } from "react";
+import {
+  UserIcon,
+  UserIconNoBg,
+  CheckedGreenIcon,
+  TimeAttackIcon,
+} from "@/components/icons";
+import { useState, useMemo } from "react";
 import CommentListItem from "../_components/CommentListItem";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { API_URL } from "@/constants/url.const";
@@ -13,6 +18,7 @@ import Loading from "@/app/loading";
 import { formatWithCommas } from "@/utils";
 import { v4 as uuidv4 } from "uuid";
 import CommentInput from "../_components/CommentInput";
+import { formatRemainingTime } from "@/utils/formatRemainingTime";
 
 type Condition = "MORE" | "EXPENSIVE";
 
@@ -86,6 +92,15 @@ const CommunityDetailPage = ({
       return res.json();
     },
   });
+
+  const highestVoteItem = useMemo(() => {
+    return data?.pollItems?.reduce((acc, cur) => {
+      return (data.optionCounts?.[acc.option] || 0) >
+        (data.optionCounts?.[cur.option] || 0)
+        ? acc
+        : cur;
+    }, data?.pollItems?.[0]);
+  }, [data]);
 
   const postVote = useMutation({
     mutationKey: ["postVote"],
@@ -178,7 +193,17 @@ const CommunityDetailPage = ({
           {Array.isArray(data.pollItems) && data.pollItems.length > 0 && (
             <div className="p-4 rounded-2xl border-gray03 border">
               <div className="flex items-center justify-between mb-3">
-                <p className="text-sm text-gray01 font-bold">진행중인 투표</p>
+                {data.pollEndAt && new Date(data.pollEndAt) > new Date() ? (
+                  <p className="text-sm text-gray01 font-bold">진행중인 투표</p>
+                ) : (
+                  <p className="text-sm text-gray01 font-bold">
+                    최종 투표 결과:{" "}
+                    <span className="text-primary04">
+                      {highestVoteItem?.option}
+                    </span>
+                  </p>
+                )}
+
                 <p className="flex items-center gap-1">
                   <UserIconNoBg />
                   <span className="text-gray05 text-sm font-bold">
@@ -186,37 +211,85 @@ const CommunityDetailPage = ({
                   </span>
                 </p>
               </div>
-              {!isVoted ? (
+              {data.pollEndAt && new Date(data.pollEndAt) > new Date() ? (
                 <>
-                  <ul className="flex flex-col gap-2">
-                    {data.pollItems.map((pollItem, index) => (
-                      <li
-                        key={index}
-                        onClick={() =>
-                          handleClickVoteItem(pollItem.option || "")
-                        }
-                        className={`w-full max-h-11 flex items-center gap-2 text-sm cursor-pointer bg-gray03 border-gray03 border-opacity-10 border bg-opacity-10 rounded-lg p-3 ${
-                          voteItem === pollItem.option
-                            ? "bg-primary03 border-primary04 border border-opacity-100"
-                            : ""
-                        }`}
+                  {!isVoted ? (
+                    <>
+                      <ul className="flex flex-col gap-2">
+                        {data.pollItems.map((pollItem, index) => (
+                          <li
+                            key={index}
+                            onClick={() =>
+                              handleClickVoteItem(pollItem.option || "")
+                            }
+                            className={`w-full max-h-11 flex items-center gap-2 text-sm cursor-pointer bg-gray03 border-gray03 border-opacity-10 border bg-opacity-10 rounded-lg p-3 ${
+                              voteItem === pollItem.option
+                                ? "bg-primary03 border-primary04 border border-opacity-100"
+                                : ""
+                            }`}
+                          >
+                            {voteItem === pollItem.option ? (
+                              <CheckedGreenIcon />
+                            ) : (
+                              <span className="w-5 h-5 rounded-full border border-gray03"></span>
+                            )}
+                            <p className="">{pollItem.option}</p>
+                          </li>
+                        ))}
+                      </ul>
+                      <button
+                        className="mt-3 w-full text-sm rounded-lg p-3 font-bold bg-primary03 text-black disabled:bg-gray03 disabled:text-white hover:opacity-90"
+                        disabled={voteItem === null}
+                        onClick={() => handleClickVote()}
                       >
-                        {voteItem === pollItem.option ? (
-                          <CheckedGreenIcon />
-                        ) : (
-                          <span className="w-5 h-5 rounded-full border border-gray03"></span>
-                        )}
-                        <p className="">{pollItem.option}</p>
-                      </li>
-                    ))}
-                  </ul>
-                  <button
-                    className="mt-3 w-full text-sm rounded-lg p-3 font-bold bg-primary03 text-black disabled:bg-gray03 disabled:text-white hover:opacity-90"
-                    disabled={voteItem === null}
-                    onClick={() => handleClickVote()}
-                  >
-                    투표하기
-                  </button>
+                        투표하기
+                      </button>
+                    </>
+                  ) : (
+                    <div className="flex flex-col gap-2">
+                      {data.pollItems?.map((pollItem, index) => {
+                        const votePercentage =
+                          ((data.optionCounts?.[pollItem.option] || 0) /
+                            (Object.values(data.optionCounts || {}).reduce(
+                              (acc, cur) => acc + cur,
+                              0
+                            ) || 1)) *
+                          100;
+
+                        const isHighest =
+                          Math.max(
+                            ...Object.values(data.optionCounts || {})
+                          ) === (data.optionCounts?.[pollItem.option] || 0);
+
+                        return (
+                          <div
+                            key={index}
+                            className={`w-full overflow-hidden text-sm rounded-lg relative after:content-[''] after:absolute after:top-0 after:left-0 after:w-[var(--vote-width)] after:h-full after:rounded-lg ${
+                              isHighest
+                                ? "bg-primary01 bg-opacity-10 after:bg-primary03"
+                                : "bg-gray03 bg-opacity-10 after:bg-gray03"
+                            } p-3 text-gray01 flex items-center justify-between`}
+                            style={{
+                              ["--vote-width" as string]: `${votePercentage}%`,
+                            }}
+                          >
+                            <p className="text-gray01 relative z-10">
+                              {pollItem.option}
+                            </p>
+                            <p className="text-gray02 text-opacity-50 relative z-10 font-bold">
+                              {Math.round(votePercentage)}%
+                            </p>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
+                  <div className="text-gray02 text-sm flex items-center gap-1 justify-end mt-2">
+                    <TimeAttackIcon />
+                    <p className="text-gray02">
+                      투표 종료까지 {formatRemainingTime(data.pollEndAt || "")}
+                    </p>
+                  </div>
                 </>
               ) : (
                 <div className="flex flex-col gap-2">

@@ -93,7 +93,13 @@ const ListItem = ({ item }: { item: CommunityDataType }) => {
         {Array.isArray(item?.pollItems) && item.pollItems.length > 0 && (
           <div className="p-4 rounded-2xl border-gray03 border">
             <div className="flex items-center justify-between mb-3">
-              <p className="text-sm text-gray01 font-bold">진행중인 투표</p>
+              <p className="text-sm text-gray01 font-bold">
+                {item?.pollEndAt
+                  ? new Date(item?.pollEndAt) > new Date()
+                    ? "진행중인 투표"
+                    : "종료된 투표"
+                  : "진행중인 투표"}
+              </p>
               <p className="flex items-center gap-1">
                 <UserIconNoBg />
                 <span className="text-gray05 text-sm font-bold">
