@@ -19,6 +19,7 @@ import SearchIcon from "./SearchIcon";
 import EmptyHeartIcon from "./EmptyHeartIcon";
 import HeartIcon from "./HeartIcon";
 import SendIcon from "./SendIcon";
+import TimeAttackIcon from "./TimeAttackIcon";
 
 export {
   CircleAddIcon,
@@ -42,4 +43,5 @@ export {
   EmptyHeartIcon,
   HeartIcon,
   SendIcon,
+  TimeAttackIcon,
 };

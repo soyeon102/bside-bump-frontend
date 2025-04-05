@@ -112,8 +112,8 @@ const CommunityPage = () => {
   }
 
   return (
-    <div className="mt-2">
-      <div className="flex flex-col gap-2 px-6">
+    <div className="flex flex-col min-h-fullWithNavbar">
+      <div className="pt-2 flex flex-col gap-2 px-6">
         <div className="flex justify-between relative">
           <p className="text-sm">게시글 {data.length}개</p>
           <p
@@ -155,13 +155,19 @@ const CommunityPage = () => {
           </div>
         </div>
       </div>
-      <ul className="bg-gray04 flex flex-col gap-y-3 pb-3">
-        {data.map((item) => (
-          <React.Fragment key={item.id}>
-            <ListItem item={item} />
-          </React.Fragment>
-        ))}
-      </ul>
+      {data.length === 0 ? (
+        <div className="flex-1 flex justify-center items-center">
+          <p className="text-lg text-gray02">진행중인 투표가 없습니다.</p>
+        </div>
+      ) : (
+        <ul className="bg-gray04 flex flex-col gap-y-3 pb-3">
+          {data.map((item) => (
+            <React.Fragment key={item.id}>
+              <ListItem item={item} />
+            </React.Fragment>
+          ))}
+        </ul>
+      )}
     </div>
   );
 };
